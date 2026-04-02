@@ -102,6 +102,17 @@ Run:
 /plugin
 ```
 
+## Advanced: Match the Starter Files
+
+The starter project does not commit these commands as files, but it does assume this operating style:
+
+- `CLAUDE.md` tells the team to use plan-first, verification-first work for real changes.
+- `settings.json` sets `model: "opusplan"` and pre-approves the repo commands the workflow depends on.
+- `/context` and `/compact` stay team habits rather than committed config.
+- `/plugin`, `/rename`, `/rc`, and `/ide` remain day-to-day operator tools, not starter files.
+
+That distinction matters: some Claude Code behavior belongs in committed repo files, and some belongs in the way humans use the tool.
+
 ## Next step
 
 Use the commands in a real task with [Your First Feature](/tutorials/first-feature), then come back for [Review and Debug Commands](/tutorials/review-debug).

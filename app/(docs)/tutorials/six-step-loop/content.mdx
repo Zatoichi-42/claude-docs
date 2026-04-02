@@ -69,6 +69,100 @@ Commit the validation change with a descriptive message and summarize the verifi
 
 **What you should see:** a commit backed by evidence, not a vague claim that the fix works.
 
+## Advanced: Match the Starter Files
+
+The starter project turns this tutorial into committed repo structure.
+
+### The starter `CLAUDE.md` workflow contract
+
+<details>
+  <summary>Starter `CLAUDE.md.template`</summary>
+
+```markdown
+# Project Working Rules
+
+## Default workflow
+- For features, bug fixes, and behavior changes: explore → plan → RED → GREEN → review.
+- Use Plan Mode (Shift+Tab or /plan) for multi-file or ambiguous work.
+- No production behavior change until a failing verification artifact exists.
+- After every production code change, run the smallest relevant verification.
+- Before stopping, run the full repo gate.
+
+## Verification policy
+- Backend/domain logic: failing automated test first.
+- UI work: failing E2E, screenshot expectation, or repro script first.
+- Migrations/ops/config: failing smoke/repro command first.
+- After implementation: run /simplify before opening a PR.
+
+## Scope discipline
+- No opportunistic refactors outside the task unless explicitly asked.
+- Keep diffs small. Explain any unavoidable architectural fallout.
+- One logical change per commit.
+
+## Project commands
+- Test (targeted):  pnpm test -- <target>
+- Lint:             pnpm lint
+- Typecheck:        pnpm typecheck
+- Fast gate:        pnpm lint && pnpm typecheck
+- Full gate:        pnpm test && pnpm lint && pnpm typecheck
+
+## Architecture notes
+<!-- Add 2-3 sentences about key architectural decisions -->
+<!-- Add test framework, ORM, router, state management specifics -->
+<!-- Add naming conventions or file organization rules -->
+```
+
+</details>
+
+### The starter scoped rule files
+
+<details>
+  <summary>Starter `frontend-testing.md`</summary>
+
+```md
+---
+globs: ["apps/web/**", "src/components/**", "src/pages/**"]
+---
+# Frontend Testing Rules
+- Use Playwright for E2E tests. Use React Testing Library for component tests.
+- Before implementing a UI component, create a failing E2E or screenshot test.
+- Visual changes must be verified with the Chrome extension or screenshot comparison.
+- Never mock fetch in component tests; use MSW (Mock Service Worker) instead.
+- Prefer testing user-visible behavior over implementation details.
+```
+
+</details>
+
+<details>
+  <summary>Starter `backend-testing.md`</summary>
+
+```md
+---
+globs: ["services/api/**", "src/server/**", "src/lib/**"]
+---
+# Backend Testing Rules
+- Write failing request/response or domain tests before handler changes.
+- Use real database in integration tests (test containers), not mocks.
+- Every new endpoint needs: unit test, integration test, error case test.
+- Test error responses and edge cases, not just happy paths.
+- Use factories for test data, not inline object literals.
+```
+
+</details>
+
+### How the starter project maps the loop
+
+| Loop step | Starter file or surface | What it does |
+| --- | --- | --- |
+| Explore | `CLAUDE.md` | Makes explore-first the default repo expectation |
+| Plan | `CLAUDE.md` | Reinforces Plan Mode for ambiguous or multi-file work |
+| RED | `test-forward` skill + `require-test-first.sh` | Requires a failing verification and a RED token before source edits |
+| GREEN | `require-test-first.sh` + `run-related-tests.sh` | Allows implementation only after RED exists, then gives fast test feedback |
+| Review | `CLAUDE.md` + `/simplify` | Makes review an expected step, even though it is not fully hook-enforced |
+| Ship | `Stop` hook in `settings.json` | Blocks completion until the repo gate is complete |
+
+The exact starter skill is shown in [Using Skills](/tutorials/skills). The exact hook code is shown in [Your First Hook](/tutorials/first-hook).
+
 ## Commands and Prompts Worth Repeating
 
 ```text

@@ -61,6 +61,47 @@ Run:
 
 **What you should see:** the active hooks or the current hook configuration surface. This is the first place to check when the session is being blocked or auto-assisted in ways you do not expect.
 
+## Advanced: Match the Starter Files
+
+The starter project ships a reusable reviewer agent in addition to `/simplify`.
+
+<details>
+  <summary>Starter `code-reviewer.md`</summary>
+
+```md
+---
+name: code-reviewer
+description: Reviews implementation against plan and coding standards.
+model: sonnet
+tools: Read, Grep, Glob, Bash
+---
+You are a code reviewer. Given a plan and recent changes:
+
+1. Run `git diff` to see all changes.
+2. Verify each plan item was implemented correctly.
+3. Check for:
+   - Missed edge cases
+   - Security issues (injection, auth bypass, data exposure)
+   - Missing or insufficient tests
+   - Performance concerns (N+1 queries, unnecessary allocations)
+   - Style violations against project conventions
+4. Rate each issue:
+   - **CRITICAL**: Blocks merge. Must fix before proceeding.
+   - **MAJOR**: Should fix. Creates real risk or tech debt.
+   - **MINOR**: Nice to fix. Style, naming, or minor improvement.
+5. CRITICAL issues must be resolved before proceeding.
+6. Summarize: what's good, what needs work, risk assessment.
+```
+
+</details>
+
+Use the two review surfaces differently:
+
+- `/simplify` is the fast built-in review pass you should use constantly.
+- `code-reviewer` is the reusable repo-specific reviewer the starter project keeps around when the team wants a consistent second opinion against the plan and team standards.
+
+The starter baseline uses both because they solve different review problems.
+
 ## What to repeat in real work
 
 ```text

@@ -103,6 +103,215 @@ List the pieces of configuration we are intentionally leaving out for now and ex
 
 **What you should see:** a short list of deferred complexity, such as extra hooks, custom agents, or plugins the team has not earned yet.
 
+## Advanced: Match the Starter Files
+
+The shipped starter project has a concrete end state. The advanced sections across the tutorials should now add up to this exact baseline:
+
+```text
+CLAUDE.md
+.claude/settings.json
+.claude/hooks/require-test-first.sh
+.claude/hooks/block-dangerous.sh
+.claude/hooks/auto-format.sh
+.claude/hooks/run-related-tests.sh
+.claude/rules/frontend-testing.md
+.claude/rules/backend-testing.md
+.claude/skills/test-forward/SKILL.md
+.claude/agents/code-reviewer.md
+.claude/state/.gitkeep
+.gitignore additions
+```
+
+### Starter `CLAUDE.md`
+
+<details>
+  <summary>Starter `CLAUDE.md.template`</summary>
+
+```md
+# Project Working Rules
+
+## Default workflow
+- For features, bug fixes, and behavior changes: explore → plan → RED → GREEN → review.
+- Use Plan Mode (Shift+Tab or /plan) for multi-file or ambiguous work.
+- No production behavior change until a failing verification artifact exists.
+- After every production code change, run the smallest relevant verification.
+- Before stopping, run the full repo gate.
+
+## Verification policy
+- Backend/domain logic: failing automated test first.
+- UI work: failing E2E, screenshot expectation, or repro script first.
+- Migrations/ops/config: failing smoke/repro command first.
+- After implementation: run /simplify before opening a PR.
+
+## Scope discipline
+- No opportunistic refactors outside the task unless explicitly asked.
+- Keep diffs small. Explain any unavoidable architectural fallout.
+- One logical change per commit.
+
+## Project commands
+- Test (targeted):  pnpm test -- <target>
+- Lint:             pnpm lint
+- Typecheck:        pnpm typecheck
+- Fast gate:        pnpm lint && pnpm typecheck
+- Full gate:        pnpm test && pnpm lint && pnpm typecheck
+
+## Architecture notes
+<!-- Add 2-3 sentences about key architectural decisions -->
+<!-- Add test framework, ORM, router, state management specifics -->
+<!-- Add naming conventions or file organization rules -->
+```
+
+</details>
+
+### Starter `.claude/settings.json`
+
+<details>
+  <summary>Starter `settings.json`</summary>
+
+```json
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "model": "opusplan",
+  "plansDirectory": ".claude/plans",
+  "permissions": {
+    "allow": [
+      "Bash(pnpm test *)",
+      "Bash(pnpm lint)",
+      "Bash(pnpm typecheck)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/require-test-first.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/block-dangerous.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/auto-format.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/run-related-tests.sh",
+            "async": true,
+            "timeout": 180
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "Verify that all required tests for this task pass. Run the project's full gate command. If verification is incomplete or failing, respond with decision: block and explain exactly what remains.",
+            "timeout": 180
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+</details>
+
+### Starter hook scripts
+
+Use the exact four scripts shown in [Your First Hook](/tutorials/first-hook):
+
+- `require-test-first.sh`
+- `block-dangerous.sh`
+- `auto-format.sh`
+- `run-related-tests.sh`
+
+That tutorial now contains the full starter code and the operational consequence of every hook.
+
+### Starter shared rules
+
+Use the exact rule files shown in [The Six-Step Loop](/tutorials/six-step-loop):
+
+- `frontend-testing.md`
+- `backend-testing.md`
+
+Those rules are part of the starter baseline because the repo should teach different verification expectations for different code surfaces.
+
+### Starter shared skill
+
+Use the exact `test-forward` skill shown in [Using Skills](/tutorials/skills).
+
+That file is what turns “verification first” from a slogan into a reusable repo workflow.
+
+### Starter reviewer agent
+
+Use the exact `code-reviewer.md` shown in [Review and Debug Commands](/tutorials/review-debug).
+
+That gives the starter baseline a reusable second review surface beyond `/simplify`.
+
+### Starter `.gitignore` and state directory
+
+<details>
+  <summary>Starter `gitignore.append`</summary>
+
+```gitignore
+# Claude Code personal overrides
+.claude/settings.local.json
+
+# Claude Code worktrees (used by /batch)
+.claude/worktrees/
+
+# Claude Code state (ephemeral)
+.claude/state/
+```
+
+</details>
+
+The starter files also include `.claude/state/.gitkeep` so the state directory exists before the `test-forward` skill writes the RED token.
+
+### Starter baseline checklist
+
+- `CLAUDE.md` matches the starter template
+- `.claude/settings.json` matches the starter config
+- all four hook scripts are present
+- both scoped rules are present
+- `skills/test-forward/SKILL.md` is present
+- `agents/code-reviewer.md` is present
+- `.claude/state/` exists
+- `.gitignore` includes the starter additions
+
 ## Next step
 
 Use [Project Setup](/configuration) as the durable reference, then move into [Team Leader Setup](/configuration/team-leads) when you are ready to roll the baseline out across the team.
