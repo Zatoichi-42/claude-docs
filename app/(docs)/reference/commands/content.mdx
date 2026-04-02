@@ -1,108 +1,170 @@
 export const metadata = {
   title: "Command Quick Reference",
   description:
-    "Permission modes, session commands, development commands, project utilities, plugins, CLI flags, and keyboard shortcuts.",
+    "The lookup page for Claude Code commands, plugin management, CLI flags, and shortcuts after you have used the guided command tutorials.",
 }
 
 # Command Quick Reference
 
-## Part 7: Complete Command Quick Reference
+Use this page as a lookup table. If you are still learning, start with [Core Session Commands](/tutorials/core-commands), [Review and Debug Commands](/tutorials/review-debug), and [Using Skills](/tutorials/skills).
 
-### Permission Modes
+## Start here
+
+These are the commands most developers should learn first:
+
+```text
+/plan
+/context
+/compact
+/rename
+/rc
+/ide
+/plugin
+/simplify
+/debug
+```
+
+## Permission modes
 
 | Input | Mode | Behavior |
-|-------|------|----------|
-| `Shift+Tab` (1×) | Auto-Accept | Claude proceeds without asking |
-| `Shift+Tab` (2×) | Plan Mode | Read-only, no edits |
-| `Shift+Tab` (3×) | Normal | Permission prompts for edits/runs |
-| `--permission-mode auto` | Auto Mode | AI classifier decides |
+| --- | --- | --- |
+| `Shift+Tab` (1x) | Auto-Accept | Claude proceeds without asking |
+| `Shift+Tab` (2x) | Plan Mode | Read-only, no edits |
+| `Shift+Tab` (3x) | Normal | Permission prompts for edits and commands |
+| `--permission-mode auto` | Auto Mode | Claude classifies routine permissions automatically |
 
-### Session Management
+## How to stop confirmations
 
+There are three different ways to reduce or remove confirmation prompts, and they are not equally safe:
+
+### 1. Best default: commit sane shared permissions
+
+Use `.claude/settings.json` to pre-approve the commands your team runs constantly. This is the normal team path because it reduces noise without throwing away all guardrails.
+
+### 2. Session-level pre-approval: `--allowedTools`
+
+If you want one session to stop asking about a known set of tools, you can pre-approve them on the command line:
+
+```bash
+claude --allowedTools "Bash(*)" "Edit(*)" "Write(*)" "Read(*)" "WebFetch(*)"
 ```
-/compact [focus]        Compress context (specify what to retain)
-/context                Check context usage
-/clear                  Reset conversation
-/rewind                 Selective rollback (code-only or chat-only)
-/rename <name>          Name current session
-/rc                     Enable Remote Control
-/color <color>          Color-code prompt bar
-/stats                  Usage stats (Pro/Max)
-/cost                   Token cost (API)
-/usage                  Rate limit status
+
+That is broad, but it is still more controlled than disabling permissions entirely because you are explicitly naming the tools Claude may use without asking.
+
+### 3. Full bypass: `--dangerously-skip-permissions`
+
+This removes permission prompts entirely:
+
+```bash
+claude --allowedTools "Bash(*)" "Edit(*)" "Write(*)" "Read(*)" "WebFetch(*)" --dangerously-skip-permissions
 ```
 
-### Development
+Use this only when you truly mean it:
 
-```
+- a throwaway sandbox
+- a tightly controlled local environment
+- automation where you already trust the command surface
+
+Do **not** treat this as the normal team default. For shared repo work, it is almost always better to tighten `permissions.allow` or use a narrower `--allowedTools` set instead of removing the guardrail completely.
+
+## Session management
+
+```text
 /plan                   Enter Plan Mode
-/fast                   Toggle 2.5× speed Opus
-/effort <level>         Set reasoning: low/medium/high
-/model <name>           Switch: opus/sonnet/haiku/opusplan
-/voice                  Push-to-talk voice mode
-/simplify [focus]       3-agent parallel code review
-/debug                  Structured debugging
-/batch <desc>           Parallel codebase migration
-/loop <int> <prompt>    Recurring scheduled task
-/security-review        Security audit of current branch
+/context                Check context usage
+/compact [focus]        Compress context and tell Claude what to retain
+/rename <name>          Name the current session
+/rc                     Enable Remote Control
+/clear                  Reset the conversation
+/rewind                 Selective rollback
+/color <color>          Color-code the prompt bar
+/stats                  Usage stats for interactive accounts
+/usage                  Rate limit status
+/cost                   Detailed token/cost view when billing context matters
 ```
 
-### Project
+## Review and debugging
 
+```text
+/simplify [focus]       Parallel review pass
+/debug                  Structured debugging workflow
+/security-review        Security-oriented review of the current change
+/permissions            Inspect current permission rules
+/hooks                  Inspect current hooks
 ```
-/init                   Bootstrap CLAUDE.md
-/memory                 Inspect/edit CLAUDE.md
-/skills                 List all skills
-/hooks                  Inspect hooks
-/permissions            Review permission rules
+
+## Project utilities
+
+```text
+/init                   Bootstrap a baseline CLAUDE.md
+/memory                 Inspect or edit CLAUDE.md
+/skills                 List available skills
+/mcp                    Authenticate with and manage connected MCP servers
+/plugin                 Open the interactive plugin manager
+/ide                    Install or connect IDE support
 /config                 Configure preferences
 /doctor                 Environment diagnostics
-/insights               Monthly usage analysis
-/release-notes          What changed in this version
+/insights               Usage analysis
+/release-notes          Recent product changes
 ```
 
-### Plugins
+## Speed and scale
 
-```
-/plugin install <n>@<marketplace>    Install plugin
-/reload-plugins                      Reload after install/update
-/ide                                 Install IDE extension
-```
-
-### CLI Flags
-
-```
-claude                          Interactive session
-claude "prompt"                 Start with initial prompt
-claude -p "prompt"              Non-interactive (headless)
-claude -c                       Continue most recent session
-claude -r "name"                Resume by name
-claude -n "name"                Start named session
-claude -w branch                Isolated git worktree
-claude -w branch --tmux         Worktree + tmux panes
-claude -c --fork-session        Fork (new ID, keeps context)
-claude --rc                     Start with Remote Control
-claude --from-pr 42             Resume PR-linked session
-claude --bare                   Skip hooks/LSP/plugins
-claude --permission-mode auto   AI-classified permissions
-claude --model opus             Specific model
-claude --effort high            Reasoning effort
-claude --agents                 Define subagents inline
-claude --max-turns 20           Turn limit (circuit breaker)
-claude --debug "api,hooks"      Debug mode with category filter
-claude --chrome                 Chrome debugging integration
+```text
+/fast                   Favor speed for straightforward work
+/effort <level>         Tune reasoning depth
+/batch <desc>           Parallelizable broad migration
+/loop <int> <prompt>    Recurring scheduled task
 ```
 
-### Keyboard Shortcuts
+## CLI flags
 
+```bash
+claude
+claude "prompt"
+claude -p "prompt"
+claude -c
+claude -r "name"
+claude -n "name"
+claude -w branch
+claude -w branch --tmux
+claude -c --fork-session
+claude --rc
+claude --from-pr 42
+claude --bare
+claude --permission-mode auto
+claude --model opus
+claude --effort high
+claude --agents
+claude --max-turns 20
+claude --debug "api,hooks"
+claude --chrome
+claude mcp add <name> ...
+claude mcp list
+claude mcp get <name>
+claude mcp remove <name>
 ```
+
+## Keyboard shortcuts
+
+```text
 Shift+Tab       Cycle permission modes
 Alt+T           Toggle extended thinking
 Alt+P           Model picker
-Ctrl+G          Open in external editor
+Ctrl+G          Open the current plan in your editor
 Ctrl+C          Interrupt Claude
-Esc+Esc         Rewind menu
+Esc+Esc         Open the rewind menu
 Ctrl+S          Screenshot stats
-!command        Raw bash execution
-@filepath       File reference autocomplete
+!command        Run a raw shell command
+@filepath       Mention a file path
 ```
+
+## Plugin reminder
+
+For most teams, the right first step is:
+
+```text
+/plugin
+```
+
+Browse what is already installed, then add only what the repo actually needs.

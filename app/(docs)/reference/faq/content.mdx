@@ -1,0 +1,56 @@
+export const metadata = {
+  title: "FAQ",
+  description:
+    "Short answers to the most common Claude Code questions about accounts, confirmations, bootstrap paths, skills, hooks, MCP, and configuration timing.",
+}
+
+# FAQ
+
+## Where should a new developer start?
+
+Start with [First-Time Setup](/getting-started), then [Core Session Commands](/tutorials/core-commands), then [Your First Feature](/tutorials/first-feature). Do not start with the full configuration page unless you already understand the daily workflow.
+
+## Should I use my personal account or the team account?
+
+Use the **team account** for this setup. Personal accounts are fine for side experiments, but this site assumes the team’s subscription-backed environment and shared working model.
+
+## When should I use `/init`?
+
+Use `/init` when you want the faster baseline and mostly need Claude to generate a starting `CLAUDE.md`.
+
+## When should I use `CLAUDE_CODE_NEW_INIT=1 claude`?
+
+Use it when you want the broader guided bootstrap flow and are ready to think through the repo baseline in more detail.
+
+## How do I stop Claude Code from asking for so many confirmations?
+
+The best default is to improve the shared permission baseline in `.claude/settings.json`. For one-off sessions, `--allowedTools` can widen what Claude may use without prompting. Only use `--dangerously-skip-permissions` when you intentionally want to remove the guardrail entirely.
+
+## Is `--dangerously-skip-permissions` a good team default?
+
+No. It is useful for trusted sandboxes or tightly controlled automation, not as the standard team posture for everyday repo work.
+
+## What is the difference between skills, hooks, plugins, and MCP?
+
+- **Skills** package reusable workflows.
+- **Hooks** automate or block specific events in a session.
+- **Plugins** add packaged capabilities to Claude Code.
+- **MCP** connects Claude Code to external tools and data sources.
+
+They solve different problems, which is why this site teaches them gradually instead of all at once.
+
+## When should we add hooks?
+
+After the team already understands the daily workflow and can explain exactly which behavior needs reinforcement. One small safety hook or one small feedback hook is usually enough to start.
+
+## When should we move an MCP server into project scope?
+
+Only when the integration is genuinely shared infrastructure for the repo. Start personal experiments in user scope first.
+
+## Do I need Superpowers on day one?
+
+No. Learn the normal Claude Code workflow first. Add Superpowers later if it reinforces a workflow the team already values.
+
+## What if an official doc and a community guide disagree?
+
+Use the official Claude Code docs as the source of truth for behavior. Use community guides to improve pedagogy, sequencing, and practical examples.

@@ -1,0 +1,108 @@
+export const metadata = {
+  title: "Build the Full Project Setup",
+  description:
+    "Build a Claude Code repo baseline from the ground up: choose /init or the guided bootstrap flow, then add CLAUDE.md, shared settings, skills, and optional hooks in layers.",
+}
+
+# Build the Full Project Setup
+
+This tutorial is the bridge into [Project Setup](/configuration). It assumes you have already worked through the command tutorials, [Daily Workflow](/workflows/daily), [Using Skills](/tutorials/skills), and [Your First Hook](/tutorials/first-hook).
+
+## 1. Start from the team account
+
+Prompt:
+
+```text
+Before we set up this repo, confirm that we should use the team account rather than a personal account and explain why that matters for shared setup.
+```
+
+**What you should see:** Claude tells you to use the **team account** for this team’s standard workflow and shared environment.
+
+## 2. Choose the bootstrap path deliberately
+
+Use one of these:
+
+```text
+/init
+```
+
+or
+
+```bash
+CLAUDE_CODE_NEW_INIT=1 claude
+```
+
+**What you should see:** either a fast baseline or the broader guided bootstrap flow.
+
+Rule of thumb:
+
+- use `/init` when you want the quicker baseline
+- use `CLAUDE_CODE_NEW_INIT=1 claude` when you want the more guided walkthrough
+
+## 3. Tighten `CLAUDE.md`
+
+Prompt:
+
+```text
+Take the generated CLAUDE.md and trim it to the smallest useful project contract:
+workflow, verification commands, and the repo facts Claude truly needs.
+```
+
+**What you should see:** a shorter, clearer `CLAUDE.md` instead of a giant wish list.
+
+## 4. Add shared settings
+
+Prompt:
+
+```text
+Create or tighten .claude/settings.json with shared permissions and sensible defaults.
+Do not add heavy hook automation yet.
+```
+
+**What you should see:** a modest shared settings file the team can actually explain.
+
+## 5. Add one shared skill
+
+Prompt:
+
+```text
+Add one shared skill only if it captures a workflow the team already repeats successfully.
+Explain why this skill belongs in the repo.
+```
+
+**What you should see:** either one focused shared skill or a clear explanation that the repo is not ready for one yet.
+
+## 6. Add one optional hook
+
+Prompt:
+
+```text
+Add either one small safety hook or one small feedback hook.
+Keep the setup narrow and explain why this is the first hook worth standardizing.
+```
+
+**What you should see:** a single intentional hook, not a copied hook matrix.
+
+## 7. Review plugins through the manager
+
+Run:
+
+```text
+/plugin
+```
+
+**What you should see:** the current plugin state. Check what is already present before adding anything.
+
+## 8. Decide what not to standardize yet
+
+Prompt:
+
+```text
+List the pieces of configuration we are intentionally leaving out for now and explain why delaying them is healthy.
+```
+
+**What you should see:** a short list of deferred complexity, such as extra hooks, custom agents, or plugins the team has not earned yet.
+
+## Next step
+
+Use [Project Setup](/configuration) as the durable reference, then move into [Team Leader Setup](/configuration/team-leads) when you are ready to roll the baseline out across the team.

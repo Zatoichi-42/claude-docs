@@ -1,0 +1,107 @@
+export const metadata = {
+  title: "Core Session Commands",
+  description:
+    "Learn the Claude Code commands you will use every week: /plan, /context, /compact, /rename, /rc, /ide, and the plugin manager.",
+}
+
+# Core Session Commands
+
+This is the best starting tutorial after [First-Time Setup](/getting-started). The goal is not to memorize every command. The goal is to learn the few commands that make ordinary sessions calmer and easier to resume.
+
+## 1. Start a named session
+
+Run:
+
+```bash
+claude -n "core-commands"
+```
+
+**What you should see:** a fresh interactive session with a reusable name.
+
+## 2. Use `/plan` before a non-trivial change
+
+Prompt:
+
+```text
+/plan
+Read the relevant area of the repo and outline the smallest safe implementation plan.
+Do not edit yet.
+```
+
+**What you should see:** a read-only investigation followed by a concrete plan.
+
+## 3. Check `/context` before the session gets messy
+
+Run:
+
+```text
+/context
+```
+
+**What you should see:** how full the context window is right now.
+
+## 4. Compact with intent
+
+Run:
+
+```text
+/compact retain the current plan, the important files, and the next action
+```
+
+**What you should see:** Claude compresses the conversation while preserving the pieces you named.
+
+## 5. Rename weak session titles immediately
+
+Run:
+
+```text
+/rename checkout-cleanup
+```
+
+**What you should see:** the session now has a useful name you can resume later.
+
+## 6. Enable Remote Control when the work matters
+
+Run:
+
+```text
+/rc
+```
+
+**What you should see:** the session becomes reachable from Claude’s remote-control surface without losing your local environment.
+
+## 7. Connect your editor
+
+Run:
+
+```text
+/ide
+```
+
+**What you should see:** Claude guides you through IDE integration so diffs and file references are easier to manage.
+
+## 8. Review plugins through the manager
+
+Run:
+
+```text
+/plugin
+```
+
+**What you should see:** the interactive plugin manager, including what is already installed. Do not start by installing everything. Just learn where to inspect plugin state.
+
+## What to repeat in real work
+
+```text
+/plan
+/context
+/compact
+/rename
+/rc
+/ide
+/plugin
+```
+
+## Next step
+
+Use the commands in a real task with [Your First Feature](/tutorials/first-feature), then come back for [Review and Debug Commands](/tutorials/review-debug).

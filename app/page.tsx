@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, BookOpen, Download, Sparkles } from "lucide-react"
+import { ArrowRight, BookOpen, ExternalLink, Sparkles } from "lucide-react"
 
 import { SiteHeader } from "@/components/site-header"
 import { buttonVariants } from "@/components/ui/button-variants"
@@ -27,10 +27,10 @@ export default function Home() {
               Claude Code Vibe Coding for real teams, not just demos.
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-muted-foreground">
-              This site combines the detailed onboarding instructions with the
-              expanded vibe-coding playbook so the result is not just accurate,
-              but usable: searchable guidance, exact downloadable starter files,
-              scenario bundles, and the workflow framing teams actually need.
+              This site is organized for real adoption: first-time setup,
+              command tutorials, daily workflow, gradual project configuration,
+              team rollout, and then the deeper reference material. It is meant
+              to teach Claude Code in the order a team can actually absorb it.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -41,14 +41,50 @@ export default function Home() {
                 <ArrowRight className="size-4" />
               </Link>
               <Link
-                href="/configuration"
+                href="/tutorials/core-commands"
                 className={cn(
                   buttonVariants({ variant: "outline", size: "lg" }),
                   "justify-center"
                 )}
               >
-                Download starter files
-                <Download className="size-4" />
+                Follow the guided tutorials
+                <ArrowRight className="size-4" />
+              </Link>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <a
+                href="https://docs.anthropic.com/en/release-notes/claude-code"
+                target="_blank"
+                rel="noreferrer"
+                className={cn(
+                  buttonVariants({ variant: "ghost" }),
+                  "justify-center border border-primary/18 bg-primary/8 text-primary hover:bg-primary/12"
+                )}
+              >
+                Latest Claude Code Updates
+                <ExternalLink className="size-4" />
+              </a>
+              <a
+                href="https://claudcod.com/"
+                target="_blank"
+                rel="noreferrer"
+                className={cn(
+                  buttonVariants({ variant: "ghost" }),
+                  "justify-center border border-border/70 bg-card/60 hover:bg-card"
+                )}
+              >
+                Community News
+                <ExternalLink className="size-4" />
+              </a>
+              <Link
+                href="/reference/best-links"
+                className={cn(
+                  buttonVariants({ variant: "ghost" }),
+                  "justify-center border border-border/70 bg-card/60 hover:bg-card"
+                )}
+              >
+                Best Links
+                <ArrowRight className="size-4" />
               </Link>
             </div>
           </div>
@@ -59,16 +95,16 @@ export default function Home() {
               </span>
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary/80">
-                  Included
+                  What this site does
                 </p>
-                <p className="text-lg font-semibold">2 source guides, 1 docs site</p>
+                <p className="text-lg font-semibold">Learn first, configure later</p>
               </div>
             </div>
             <div className="mt-6 space-y-3 text-sm text-muted-foreground">
-              <p>Detailed onboarding chapters preserved and split into a docs IA.</p>
-              <p>Expanded hooks, glossary, release changes, and adoption roadmap from the vibe guide.</p>
-              <p>Searchable docs with per-section navigation and deep links.</p>
-              <p>Downloadable individual files plus scenario-specific bundles ready to unpack.</p>
+              <p>Beginners start with setup, commands, and daily workflow instead of heavy repo policy.</p>
+              <p>Project setup is treated as a capstone that builds on skills, hooks, and workflow habits you already understand.</p>
+              <p>Team rollout, reference, and advanced chapters stay available without becoming the on-ramp.</p>
+              <p>Starter files and download packs are still here once you are ready to standardize the repo.</p>
             </div>
           </div>
         </section>

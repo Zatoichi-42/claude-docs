@@ -1,113 +1,56 @@
 export const metadata = {
   title: "Hooks & Events",
   description:
-    "Lifecycle events, handler types, exit semantics, and enforcement patterns for professional Claude Code setups.",
+    "A beginner-first guide to Claude Code hooks, plus the deeper lifecycle reference teams need once they move beyond a first safety or feedback hook.",
 }
 
 # Hooks & Events
 
-The vibe-coding guide expands the hook picture beyond the smaller source document. The short version: hooks are the deterministic enforcement layer. If a team wants a rule to stick, the rule needs a hook or another hard gate behind it.
+Hooks are optional automations or guardrails that run at specific moments in a Claude Code session.
 
-## What the expanded guide corrects
+Most teams do **not** need to learn the full hook surface area on day one. Start here if you are ready to add one small guardrail or one small feedback loop. If you are not there yet, keep using [Daily Workflow](/workflows/daily) and [Project Setup](/configuration) first.
 
-- Hook coverage is broader than a 3-4 event mental model.
-- As of March-April 2026, Claude Code exposes **21+ lifecycle events** across **command**, **http**, **prompt**, and **agent** handler types.
-- `PermissionDenied`, `TeammateIdle`, `TaskCompleted`, `Elicitation`, `ElicitationResult`, `SessionStart`, `SessionEnd`, `SubagentStart`, `SubagentStop`, `PreCompact`, and `ConfigChange` all matter in advanced setups.
+## Do you need hooks yet?
 
-## Major Hook Events
+You probably do **not** need hooks yet if:
 
-| Event | When | Control | Matcher |
-|------|------|---------|---------|
-| `PreToolUse` | Before tool call executes | Allow / deny / defer / modify input | Tool name such as `Bash`, `Write`, `Edit`, `Read` |
-| `PostToolUse` | After tool completes successfully | Add context and trigger follow-up work | Tool name |
-| `Stop` | When Claude finishes responding | Block or allow completion | — |
-| `SubagentStop` | When a subagent finishes | Block or allow | — |
-| `SessionStart` | Session begins | Add context | — |
-| `SessionEnd` | Session terminates | Side effects only | — |
-| `UserPromptSubmit` | User submits a prompt | Add context or modify | — |
-| `Notification` | Claude sends a notification | Route to desktop, Slack, or other sinks | Notification type |
-| `PermissionRequest` | Permission dialog is shown | Auto-approve or auto-deny | — |
-| `PermissionDenied` | Auto Mode classifier denies a tool call | Retry with a different approach | — |
-| `TeammateIdle` | Agent Team member goes idle | Reassign work with exit code `2` | — |
-| `TaskCompleted` | Agent Team task marked complete | Enforce quality gates with exit code `2` | — |
-| `Elicitation` | MCP server requests structured user input | Intercept or modify | — |
-| `ElicitationResult` | After MCP input returns | Override or modify downstream response | — |
-| `PreCompact` | Before context compaction | Side effects | — |
-| `ConfigChange` | Configuration changes | Side effects | — |
-| `SubagentStart` | Subagent spawns | Side effects | — |
+- the team is still learning the basic session flow
+- you are still revising `CLAUDE.md`
+- nobody can clearly explain which behavior needs enforcement
 
-## Handler Types
+You probably **do** need a first hook if:
 
-### `command`
+- one risky action keeps repeating
+- one helpful post-edit action keeps getting forgotten
+- the team already agrees on the workflow and wants a lightweight way to reinforce it
 
-Use shell commands when you need fast local enforcement.
+## The 3 hooks to learn first
 
-- receives event JSON on stdin
-- returns exit code semantics that Claude understands
-- ideal for formatting, security gates, lightweight validation, and test triggering
+| Hook | When it runs | Good first use |
+| --- | --- | --- |
+| `PreToolUse` | Before a tool executes | Block an obviously risky shell command or stop source edits before a required check |
+| `PostToolUse` | After a tool succeeds | Run a formatter or a related verification step |
+| `Stop` | When Claude is about to finish | Require a final repo gate before the session claims the task is done |
 
-```bash
-bash .claude/hooks/block-dangerous.sh
-```
+Everything else is later.
 
-### `http`
+## Minimum useful setup
 
-Use HTTP handlers when the hook decision depends on an external service.
-
-- good for remote policy checks or centralized logging
-- useful when multiple repos need one shared enforcement service
-
-```text
-https://your-server.example.com/hook
-```
-
-### `prompt`
-
-Use prompt handlers when the decision is context-sensitive and best expressed as an LLM judgment.
-
-```text
-"Is this command safe to run in production? $ARGUMENTS"
-```
-
-### `agent`
-
-Use agent handlers when the verification itself needs tools, file inspection, or command execution.
-
-```text
-"Verify all tests pass. Run the full gate. Block if incomplete."
-```
-
-## Exit Code Semantics
-
-| Exit code | Meaning | Practical effect |
-|-----------|---------|------------------|
-| `0` | Allow | The action proceeds normally |
-| `2` | Block | The action is denied and the feedback is sent back into the session |
-| `1` | Warning | The action proceeds, but the user sees a warning |
-
-`PreToolUse` is where teams normally enforce "no production code before RED." `PostToolUse` is where teams add fast feedback. `Stop` is where teams refuse to finish until the repo gate passes.
-
-## Example Settings Shape
+If you only want one safety hook and one feedback hook, the shape looks like this:
 
 ```json
 {
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [{
-          "type": "command",
-          "command": "bash .claude/hooks/require-test-first.sh",
-          "timeout": 5
-        }]
-      },
-      {
         "matcher": "Bash",
-        "hooks": [{
-          "type": "command",
-          "command": "bash .claude/hooks/block-dangerous.sh",
-          "timeout": 5
-        }]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/block-dangerous.sh",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -116,61 +59,100 @@ Use agent handlers when the verification itself needs tools, file inspection, or
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/run-related-tests.sh",
-            "async": true,
-            "timeout": 180
-          },
-          {
-            "type": "command",
             "command": "bash .claude/hooks/auto-format.sh",
             "timeout": 10
           }
         ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [{
-          "type": "agent",
-          "prompt": "Verify all required tests pass. Run the full gate. Block if incomplete.",
-          "timeout": 180
-        }]
       }
     ]
   }
 }
 ```
 
-## Advanced Notes from the Expanded Guide
+That is enough to understand the model:
 
-### `defer`
+- a hook listens to an event
+- a matcher narrows which tool calls it applies to
+- a handler does the work
+- exit codes decide whether Claude continues or gets blocked
 
-As of `v2.1.89`, a `PreToolUse` hook can return `permissionDecision: "defer"` to pause a headless session for human review.
+## Handler types in practical order
 
-```jsonc
-{
-  "hookSpecificOutput": {
-    "permissionDecision": "defer",
-    "permissionDecisionReason": "Destructive operation requires human approval"
-  }
-}
+### `command`
+
+Start here.
+
+Use shell commands when the decision is local, fast, and easy to explain. Most first hooks should be `command` hooks.
+
+### `agent`
+
+Use this later when the hook needs to inspect files, run tools, and make a richer judgment, such as a final verification pass.
+
+### `http` and `prompt`
+
+Ignore these until you have a clear external-policy or model-judgment use case. They are real, but they are not how most teams should learn hooks.
+
+## Exit codes in human terms
+
+| Exit code | Meaning | What that feels like |
+| --- | --- | --- |
+| `0` | allow | Claude keeps going |
+| `1` | warn | Claude keeps going, but the session sees a warning |
+| `2` | block | Claude is stopped and the hook explains why |
+
+For beginners, think in three words: **allow, warn, block**.
+
+## Try it yourself
+
+Use this safe first exercise:
+
+1. Create a tiny hook script that appends the edited file path to a log file.
+2. Add it as a `PostToolUse` hook for `Write|Edit|MultiEdit`.
+3. Make one small edit in the repo.
+4. Confirm the log entry appears.
+
+Prompt:
+
+```text
+Help me add a harmless PostToolUse hook that logs edited file paths so I can learn the hook mechanics before I add real guardrails.
 ```
 
-This is especially useful in CI/CD.
+What you should see:
 
-### `PermissionDenied`
+- Claude creates a tiny hook script
+- `settings.json` gets one narrow `PostToolUse` entry
+- the next edit leaves a visible breadcrumb you can inspect
 
-Also new in `v2.1.89`, the `PermissionDenied` hook fires after Auto Mode blocks a tool call. That gives teams a place to decide whether Claude should retry with a safer path.
+That is a better first lesson than starting with a giant enforcement stack.
 
-### Hook `if` field
+## Common beginner mistakes
 
-The earlier guide correctly noted the `if` field added in `v2.1.85`. The expanded guide still recommends it as the best way to narrow hook scope and reduce overhead.
+- adding several hooks before the team understands the daily workflow
+- putting slow work in `PreToolUse`
+- using a hook to enforce a rule nobody has actually agreed on
+- copying advanced events because they sound powerful
+- turning a convenience automation into a blocker before the team trusts it
 
-## Practical Recommendation
+## Advanced hook events you can ignore for now
 
-Build your enforcement stack in this order:
+Once the basics work, these events become useful in larger setups:
 
-1. `PreToolUse` guardrails for behavior and safety
-2. `PostToolUse` formatting and related-test feedback
-3. `Stop` verification gate
-4. specialized hooks such as `PermissionDenied` and team-task events when the workflow grows more complex
+| Event | Typical later use |
+| --- | --- |
+| `PermissionDenied` | Retry or reroute work after auto-permission denial |
+| `SessionStart` / `SessionEnd` | Add or record context at lifecycle boundaries |
+| `SubagentStart` / `SubagentStop` | Coordinate or verify agent work |
+| `PreCompact` | Persist state before compaction |
+| `ConfigChange` | Observe or audit configuration changes |
+| `Elicitation` / `ElicitationResult` | Intercept structured user-input flows |
+
+There is nothing wrong with these events. They are just later-stage tools.
+
+## Practical recommendation
+
+Adopt hooks in this order:
+
+1. one safety hook
+2. one feedback hook
+3. an optional `Stop` verification gate
+4. advanced lifecycle hooks only after the team is already comfortable with the basics

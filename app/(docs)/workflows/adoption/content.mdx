@@ -1,68 +1,58 @@
 export const metadata = {
   title: "Adoption Roadmap",
   description:
-    "A layered rollout plan for teams adopting Claude Code without overwhelming the repo or the people using it.",
+    "A phased Claude Code rollout plan: teach the workflow first, standardize the baseline next, then scale only after the team trusts the system.",
 }
 
 # Adoption Roadmap
 
-The expanded vibe-coding guide is explicit about this: a team should not try to adopt every Claude Code capability at once. The better pattern is to adopt in layers so trust, enforcement, and scale grow together.
+The fastest way to create resistance is to roll out every Claude Code feature at once. The better pattern is staged adoption.
 
 ## Layer 1: Foundation
 
 **When:** Day 1
 
-- Write a tight `CLAUDE.md` under 200 lines.
-- Configure `settings.json` with the model choice, permission rules, and baseline hooks.
-- Learn the mode cycle with `Shift+Tab`.
-- Learn the essential control points: `Ctrl+C`, `@file`, and `!cmd`.
-- Run `/init`, `/terminal-setup`, and `/doctor`.
+- use the **team account**
+- complete [First-Time Setup](/getting-started)
+- write a short `CLAUDE.md`
+- teach `/plan`, `/context`, `/compact`, and `/rename`
 
-## Layer 2: Verification
+## Layer 2: Daily Flow
 
 **When:** Week 1
 
-- Add the `PreToolUse` hook that blocks source edits without a RED token.
-- Add `PostToolUse` hooks for formatting and related-test feedback.
-- Add a `Stop` agent hook that runs the final repo gate.
-- Write scoped rules for the major areas of the codebase.
-- Create the `test-forward` skill.
+- run [Your First Feature](/tutorials/first-feature)
+- teach the [Daily Workflow](/workflows/daily)
+- use `/simplify` and `/debug` as the default review and recovery tools
 
-## Layer 3: Productivity
+## Layer 3: Shared Baseline
 
 **When:** Week 2
 
-- Install Superpowers.
-- Install LSP plugins.
-- Teach `/simplify`, `/debug`, `/rc`, and `/fast`.
-- Improve the default review loop before adding more automation.
+- commit shared settings only after the team understands the workflow they are encoding
+- add one shared skill that captures a proven pattern
+- add one small hook only when it removes repeated pain or risk
 
-## Layer 4: Scale
+## Layer 4: Team Rollout
 
 **When:** Week 3+
 
-- Use `/batch` for codebase-wide migrations.
-- Use subagents for writer/reviewer or implementer/tester splits.
-- Experiment with Agent Teams when workers need to coordinate.
-- Integrate headless mode and `defer` into CI/CD.
-- Use `/loop` and `--worktree` for recurring checks and parallel work.
+- standardize only the rules the team is ready to live with
+- review plugins through `/plugin`
+- use [Team Leader Setup](/configuration/team-leads) to decide what to enforce now versus later
 
-## Layer 5: Continuous Improvement
+## Layer 5: Scale
+
+**When:** Later
+
+- use `/batch` for truly parallel migrations
+- add subagents, stronger hooks, or CI/CD automation only when the repo has earned that complexity
+- move into [Scaling Workflows](/workflows/scaling) and [CI/CD Integration](/advanced/ci-cd) when the basics are stable
+
+## Layer 6: Continuous improvement
 
 **When:** Ongoing
 
-- Run `/insights` monthly.
-- Check `/release-notes` weekly.
-- Turn successful workflows into skills, rules, and hooks.
-- Keep team-shared config committed.
-- Keep personal overrides in `settings.local.json`.
-
-## Why this rollout works
-
-Each layer solves a different problem:
-
-- **Foundation** gives the team a common operating model.
-- **Verification** keeps Claude honest.
-- **Productivity** speeds up the work once guardrails exist.
-- **Scale** adds parallelism only after the basics are dependable.
-- **Continuous improvement** stops the system from freezing in place while Claude Code keeps changing.
+- review release notes regularly
+- keep shared setup small enough to maintain
+- turn proven team habits into skills, rules, and hooks instead of inventing them in advance

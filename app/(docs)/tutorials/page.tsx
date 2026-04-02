@@ -7,7 +7,7 @@ import { tutorialCards } from "@/lib/navigation"
 export const metadata: Metadata = {
   title: "Tutorials",
   description:
-    "Hands-on walkthroughs for first feature work, the six-step loop, and the VS Code extension workflow.",
+    "Hands-on walkthroughs for core commands, daily workflow, skills, hooks, project setup, and VS Code integration.",
 }
 
 export default function TutorialsPage() {
@@ -15,8 +15,9 @@ export default function TutorialsPage() {
     <>
       <h1>Tutorials</h1>
       <p>
-        These guides turn the reference material into concrete session
-        walkthroughs you can mirror in your own project.
+        These guides are the intended path into the rest of the site. Start
+        with commands, practice the daily flow, add skills and a first hook,
+        and only then build the shared project setup.
       </p>
       <div className="not-prose mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {tutorialCards.map((tutorial) => (

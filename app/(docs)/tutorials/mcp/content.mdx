@@ -1,0 +1,91 @@
+export const metadata = {
+  title: "Using MCP Tools",
+  description:
+    "Connect one external tool through MCP, learn the difference between user and project scope, authenticate with /mcp, and decide when an integration belongs in shared setup.",
+}
+
+# Using MCP Tools
+
+MCP lets Claude Code connect to external tools and data sources. The important beginner lesson is not “connect everything.” The important lesson is to connect one useful tool safely, understand scopes, and only then decide whether it belongs in shared project setup.
+
+## 1. Start with personal scope while you learn
+
+Use **user** scope for your first experiment. That keeps the integration private to you while you learn how it behaves.
+
+The official docs use commands like this:
+
+```bash
+claude mcp add --scope user --transport http github https://api.githubcopilot.com/mcp/
+```
+
+**What you should see:** Claude Code registers a user-scoped MCP server instead of immediately writing shared project configuration.
+
+## 2. Authenticate from inside Claude Code
+
+Run:
+
+```text
+/mcp
+```
+
+Then choose the server you added and authenticate if it requires OAuth.
+
+**What you should see:** Claude Code opens the MCP authentication flow for the selected server.
+
+## 3. Ask Claude to use the tool naturally
+
+Prompt:
+
+```text
+Use the GitHub MCP connection to show me the open pull requests assigned to me.
+Explain what data source you are using.
+```
+
+**What you should see:** Claude tells you it is using the MCP-backed GitHub tool and answers using real external data.
+
+## 4. Inspect what you added from the CLI
+
+Run:
+
+```bash
+claude mcp list
+claude mcp get github
+```
+
+**What you should see:** the server appears in your MCP list, and `get` shows its configuration.
+
+## 5. Learn when project scope is appropriate
+
+Move an MCP server into **project** scope only when:
+
+- the whole team needs the same integration
+- the integration is part of normal repo work
+- you are comfortable checking `.mcp.json` into version control
+
+At that point, the flow becomes shared infrastructure instead of a personal experiment.
+
+## 6. Know the three scopes
+
+| Scope | Use it for |
+| --- | --- |
+| `local` | experiments tied to one project for one developer |
+| `project` | team-shared integrations committed through `.mcp.json` |
+| `user` | personal utilities you want across multiple projects |
+
+The official guidance is clear here: do not jump to project scope just because the integration works.
+
+## What to repeat in real work
+
+```bash
+claude mcp add --scope user ...
+claude mcp list
+claude mcp get <name>
+```
+
+```text
+/mcp
+```
+
+## Next step
+
+If the integration is still personal, keep it that way. If the team now clearly needs it, carry that decision into [Build the Full Project Setup](/tutorials/project-setup) and [Project Setup](/configuration).

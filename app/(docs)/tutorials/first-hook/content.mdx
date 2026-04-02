@@ -1,0 +1,77 @@
+export const metadata = {
+  title: "Your First Hook",
+  description:
+    "Add one harmless hook so you understand the mechanics before you try to enforce a whole-team policy.",
+}
+
+# Your First Hook
+
+This tutorial is intentionally small. The goal is to learn how hooks fit together without starting with a giant enforcement stack.
+
+## 1. Create a harmless hook script
+
+Run:
+
+```bash
+mkdir -p .claude/hooks .claude/state
+```
+
+Prompt:
+
+```text
+Create a tiny hook script at .claude/hooks/log-edit.sh that appends the edited file path to .claude/state/edited-files.log.
+Keep it harmless and explain what it does.
+```
+
+**What you should see:** a tiny script whose only job is to leave a visible breadcrumb when Claude edits a file.
+
+## 2. Add it as a `PostToolUse` hook
+
+Prompt:
+
+```text
+Update .claude/settings.json so Write, Edit, and MultiEdit trigger .claude/hooks/log-edit.sh after a successful edit.
+Keep the change as small as possible.
+```
+
+**What you should see:** one narrow `PostToolUse` entry instead of a large hook matrix.
+
+## 3. Make one small edit
+
+Prompt:
+
+```text
+Make one tiny docs edit so we can prove the hook runs.
+```
+
+**What you should see:** the edit completes normally and your hook script runs afterward.
+
+## 4. Inspect the result
+
+Prompt:
+
+```text
+Show me the contents of .claude/state/edited-files.log and explain what just happened.
+```
+
+**What you should see:** the recently edited file path in the log.
+
+## 5. Inspect the hook surface from inside Claude Code
+
+Run:
+
+```text
+/hooks
+```
+
+**What you should see:** confirmation that the hook exists and is part of the current configuration surface.
+
+## What this tutorial teaches
+
+- hooks are just event listeners plus handlers
+- the first hook should be easy to explain
+- it is better to learn the mechanics with a harmless example than to start with a hard blocker
+
+## Next step
+
+When the hook mechanics feel comfortable, continue with [Build the Full Project Setup](/tutorials/project-setup) and then [Project Setup](/configuration).

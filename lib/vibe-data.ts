@@ -1,8 +1,8 @@
 export const corePrinciples = [
   {
     icon: "🎯",
-    title: "Core Principle",
-    body: "No production behavior change until a failing verification artifact exists.",
+    title: "Workflow Before Configuration",
+    body: "Learn the session loop first. Add shared repo structure only after the team understands how good Claude Code work feels day to day.",
   },
   {
     icon: "🧪",
@@ -10,9 +10,9 @@ export const corePrinciples = [
     body: "Give Claude something concrete to verify against: tests, screenshots, expected outputs, or smoke commands.",
   },
   {
-    icon: "⚡",
-    title: "Deterministic Hooks",
-    body: "If you want a team rule to stick, enforce it with hooks instead of relying on prose alone.",
+    icon: "🧱",
+    title: "Progressive Team Baseline",
+    body: "Start with a tight CLAUDE.md and shared settings. Add skills, hooks, and plugins only where they remove real friction.",
   },
 ]
 
@@ -50,33 +50,33 @@ export const repositoryStructure = `repo/
 export const quickSurfaceLinks = [
   {
     icon: "📖",
-    title: "Step-by-Step Tutorial",
-    description: "Follow the setup-to-ship flow with concrete prompts and verification checkpoints.",
-    href: "/tutorials/six-step-loop",
+    title: "Core Commands",
+    description: "Start with the slash commands you will use constantly before you touch team-wide configuration.",
+    href: "/tutorials/core-commands",
   },
   {
-    icon: "⌨️",
-    title: "Command Reference",
-    description: "Session commands, mode toggles, CLI flags, and shortcuts in one searchable place.",
-    href: "/reference/commands",
+    icon: "🚀",
+    title: "Your First Feature",
+    description: "Get a first win with a concrete explore -> RED -> GREEN -> review flow you can repeat tomorrow.",
+    href: "/tutorials/first-feature",
   },
   {
-    icon: "🪝",
-    title: "Hooks Reference",
-    description: "Lifecycle events, handler types, exit semantics, and hook design patterns.",
-    href: "/configuration/hooks",
+    icon: "🗓️",
+    title: "Daily Workflow",
+    description: "Turn the tutorial habits into a repeatable day-to-day operating loop once the basics are comfortable.",
+    href: "/workflows/daily",
   },
   {
-    icon: "📈",
-    title: "Adoption Roadmap",
-    description: "Layer the rollout from foundation to scale instead of trying to switch everything at once.",
-    href: "/workflows/adoption",
+    icon: "🧰",
+    title: "Project Setup",
+    description: "Build the shared repo baseline only after you understand what each piece is buying you.",
+    href: "/configuration",
   },
   {
     icon: "📚",
-    title: "Glossary",
-    description: "Shared vocabulary for context management, Auto Mode, hooks, subagents, and MCP.",
-    href: "/reference/glossary",
+    title: "Best Links",
+    description: "Jump to the official docs, release notes, and the best supplemental community tutorials from one page.",
+    href: "/reference/best-links",
   },
   {
     icon: "🕐",
@@ -92,37 +92,48 @@ export const adoptionLayers = [
     title: "Foundation",
     when: "Day 1",
     items: [
+      "Use a team account, complete first-time setup, and learn the mode cycle and core controls.",
       "Write a tight CLAUDE.md with workflow rules and project commands.",
-      "Configure settings.json with model, permissions, and baseline hooks.",
-      "Learn the mode cycle and the session basics: Shift+Tab, Ctrl+C, @file, and !cmd.",
-      "Run /init, /terminal-setup, and /doctor.",
+      "Choose the lightest bootstrap path that still gives the repo a clear baseline.",
+      "Teach /plan, /context, /compact, and /rename before you standardize anything else.",
     ],
   },
   {
     layer: "Layer 2",
-    title: "Verification",
+    title: "Daily Flow",
     when: "Week 1",
     items: [
-      "Add the PreToolUse gate that blocks source edits without RED.",
-      "Add PostToolUse feedback hooks for related tests and formatting.",
-      "Add the Stop agent hook for the final repo gate.",
-      "Create scoped rules and the test-forward skill.",
+      "Practice the six-step loop on a few real tasks before adding heavy repo automation.",
+      "Teach /simplify and /debug as the default review and recovery tools.",
+      "Use /plugin to inspect what is already available before adding anything new.",
+      "Introduce skills after the team already recognizes the recurring workflow they help with.",
     ],
   },
   {
     layer: "Layer 3",
-    title: "Productivity",
+    title: "Shared Baseline",
     when: "Week 2",
     items: [
-      "Install Superpowers and LSP plugins.",
-      "Teach /simplify, /debug, /rc, and /fast.",
-      "Use better review loops before scaling the workflow.",
+      "Commit shared settings once the team agrees on permissions, model choices, and the repo gate.",
+      "Add one convenience hook or one safety hook, not an entire event matrix.",
+      "Create scoped rules and one explicit skill that reinforces the workflow the team already uses.",
+      "Teach the full project setup only after the team can explain why each piece exists.",
     ],
   },
   {
     layer: "Layer 4",
-    title: "Scale",
+    title: "Team Rollout",
     when: "Week 3+",
+    items: [
+      "Standardize only the rules and automation the team is ready to live with.",
+      "Add stronger hooks, custom agents, and plugin expectations where they remove real coordination cost.",
+      "Use the adoption roadmap and team-lead setup page to stage the rollout instead of flipping everything on at once.",
+    ],
+  },
+  {
+    layer: "Layer 5",
+    title: "Scale",
+    when: "Later",
     items: [
       "Use /batch for broad migrations.",
       "Use subagents or Agent Teams for multi-domain work.",
@@ -131,7 +142,7 @@ export const adoptionLayers = [
     ],
   },
   {
-    layer: "Layer 5",
+    layer: "Layer 6",
     title: "Continuous Improvement",
     when: "Ongoing",
     items: [
