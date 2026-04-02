@@ -96,7 +96,7 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.23 0.02 286);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.78 0.105 255);
+  --primary: oklch(0.84 0 0);
   --primary-foreground: oklch(0.22 0.02 286);
   --secondary: oklch(0.29 0.02 286);
   --secondary-foreground: oklch(0.985 0 0);
@@ -107,7 +107,7 @@
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 14%);
   --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.78 0.105 255);
+  --ring: oklch(0.84 0 0);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -115,7 +115,7 @@
   --chart-5: oklch(0.269 0 0);
   --sidebar: oklch(0.2 0.02 286);
   --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.76 0.105 255);
+  --sidebar-primary: oklch(0.84 0 0);
   --sidebar-primary-foreground: oklch(0.22 0.02 286);
   --sidebar-accent: oklch(0.29 0.02 286);
   --sidebar-accent-foreground: oklch(0.985 0 0);
@@ -225,7 +225,7 @@
   }
 
   .dark .text-gradient-brand {
-    background: linear-gradient(135deg, #f8fafc, #c7d2fe, #ddd6fe);
+    background: linear-gradient(135deg, #f8fafc, #d4d4d8, #a1a1aa);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
