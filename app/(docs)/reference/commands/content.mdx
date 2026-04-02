@@ -1,0 +1,108 @@
+export const metadata = {
+  title: "Command Quick Reference",
+  description:
+    "Permission modes, session commands, development commands, project utilities, plugins, CLI flags, and keyboard shortcuts.",
+}
+
+# Command Quick Reference
+
+## Part 7: Complete Command Quick Reference
+
+### Permission Modes
+
+| Input | Mode | Behavior |
+|-------|------|----------|
+| `Shift+Tab` (1×) | Auto-Accept | Claude proceeds without asking |
+| `Shift+Tab` (2×) | Plan Mode | Read-only, no edits |
+| `Shift+Tab` (3×) | Normal | Permission prompts for edits/runs |
+| `--permission-mode auto` | Auto Mode | AI classifier decides |
+
+### Session Management
+
+```
+/compact [focus]        Compress context (specify what to retain)
+/context                Check context usage
+/clear                  Reset conversation
+/rewind                 Selective rollback (code-only or chat-only)
+/rename <name>          Name current session
+/rc                     Enable Remote Control
+/color <color>          Color-code prompt bar
+/stats                  Usage stats (Pro/Max)
+/cost                   Token cost (API)
+/usage                  Rate limit status
+```
+
+### Development
+
+```
+/plan                   Enter Plan Mode
+/fast                   Toggle 2.5× speed Opus
+/effort <level>         Set reasoning: low/medium/high
+/model <name>           Switch: opus/sonnet/haiku/opusplan
+/voice                  Push-to-talk voice mode
+/simplify [focus]       3-agent parallel code review
+/debug                  Structured debugging
+/batch <desc>           Parallel codebase migration
+/loop <int> <prompt>    Recurring scheduled task
+/security-review        Security audit of current branch
+```
+
+### Project
+
+```
+/init                   Bootstrap CLAUDE.md
+/memory                 Inspect/edit CLAUDE.md
+/skills                 List all skills
+/hooks                  Inspect hooks
+/permissions            Review permission rules
+/config                 Configure preferences
+/doctor                 Environment diagnostics
+/insights               Monthly usage analysis
+/release-notes          What changed in this version
+```
+
+### Plugins
+
+```
+/plugin install <n>@<marketplace>    Install plugin
+/reload-plugins                      Reload after install/update
+/ide                                 Install IDE extension
+```
+
+### CLI Flags
+
+```
+claude                          Interactive session
+claude "prompt"                 Start with initial prompt
+claude -p "prompt"              Non-interactive (headless)
+claude -c                       Continue most recent session
+claude -r "name"                Resume by name
+claude -n "name"                Start named session
+claude -w branch                Isolated git worktree
+claude -w branch --tmux         Worktree + tmux panes
+claude -c --fork-session        Fork (new ID, keeps context)
+claude --rc                     Start with Remote Control
+claude --from-pr 42             Resume PR-linked session
+claude --bare                   Skip hooks/LSP/plugins
+claude --permission-mode auto   AI-classified permissions
+claude --model opus             Specific model
+claude --effort high            Reasoning effort
+claude --agents                 Define subagents inline
+claude --max-turns 20           Turn limit (circuit breaker)
+claude --debug "api,hooks"      Debug mode with category filter
+claude --chrome                 Chrome debugging integration
+```
+
+### Keyboard Shortcuts
+
+```
+Shift+Tab       Cycle permission modes
+Alt+T           Toggle extended thinking
+Alt+P           Model picker
+Ctrl+G          Open in external editor
+Ctrl+C          Interrupt Claude
+Esc+Esc         Rewind menu
+Ctrl+S          Screenshot stats
+!command        Raw bash execution
+@filepath       File reference autocomplete
+```

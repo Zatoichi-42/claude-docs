@@ -1,0 +1,68 @@
+export const metadata = {
+  title: "Adoption Roadmap",
+  description:
+    "A layered rollout plan for teams adopting Claude Code without overwhelming the repo or the people using it.",
+}
+
+# Adoption Roadmap
+
+The expanded vibe-coding guide is explicit about this: a team should not try to adopt every Claude Code capability at once. The better pattern is to adopt in layers so trust, enforcement, and scale grow together.
+
+## Layer 1: Foundation
+
+**When:** Day 1
+
+- Write a tight `CLAUDE.md` under 200 lines.
+- Configure `settings.json` with the model choice, permission rules, and baseline hooks.
+- Learn the mode cycle with `Shift+Tab`.
+- Learn the essential control points: `Ctrl+C`, `@file`, and `!cmd`.
+- Run `/init`, `/terminal-setup`, and `/doctor`.
+
+## Layer 2: Verification
+
+**When:** Week 1
+
+- Add the `PreToolUse` hook that blocks source edits without a RED token.
+- Add `PostToolUse` hooks for formatting and related-test feedback.
+- Add a `Stop` agent hook that runs the final repo gate.
+- Write scoped rules for the major areas of the codebase.
+- Create the `test-forward` skill.
+
+## Layer 3: Productivity
+
+**When:** Week 2
+
+- Install Superpowers.
+- Install LSP plugins.
+- Teach `/simplify`, `/debug`, `/rc`, and `/fast`.
+- Improve the default review loop before adding more automation.
+
+## Layer 4: Scale
+
+**When:** Week 3+
+
+- Use `/batch` for codebase-wide migrations.
+- Use subagents for writer/reviewer or implementer/tester splits.
+- Experiment with Agent Teams when workers need to coordinate.
+- Integrate headless mode and `defer` into CI/CD.
+- Use `/loop` and `--worktree` for recurring checks and parallel work.
+
+## Layer 5: Continuous Improvement
+
+**When:** Ongoing
+
+- Run `/insights` monthly.
+- Check `/release-notes` weekly.
+- Turn successful workflows into skills, rules, and hooks.
+- Keep team-shared config committed.
+- Keep personal overrides in `settings.local.json`.
+
+## Why this rollout works
+
+Each layer solves a different problem:
+
+- **Foundation** gives the team a common operating model.
+- **Verification** keeps Claude honest.
+- **Productivity** speeds up the work once guardrails exist.
+- **Scale** adds parallelism only after the basics are dependable.
+- **Continuous improvement** stops the system from freezing in place while Claude Code keeps changing.

@@ -1,0 +1,81 @@
+export const metadata = {
+  title: "The Six-Step Loop",
+  description:
+    "A concrete walkthrough of EXPLORE, PLAN, RED, GREEN, REVIEW, and SHIP using a small validation task.",
+}
+
+# The Six-Step Loop
+
+This tutorial mirrors the workflow chapter, but with a single concrete task: add input validation to an existing form or API handler.
+
+## EXPLORE
+
+Prompt:
+
+```text
+Read the current validation flow and explain what happens today when invalid input arrives.
+Do not edit yet.
+```
+
+**What you should see:** a read-only explanation of the current behavior and the likely files involved.
+
+## PLAN
+
+Prompt:
+
+```text
+Create a detailed plan for adding the missing validation with the smallest possible change.
+```
+
+**What you should see:** a plan that names the handler, the validation location, and the test or repro that should fail first.
+
+## RED
+
+Prompt:
+
+```text
+Write the smallest failing verification for invalid input. Run it and confirm the failure.
+```
+
+**What you should see:** a clearly failing test or repro that proves the gap.
+
+## GREEN
+
+Prompt:
+
+```text
+Implement the validation so the existing RED check turns GREEN.
+```
+
+**What you should see:** the change stays close to the failing verification instead of branching into unrelated cleanup.
+
+## REVIEW
+
+Prompt:
+
+```text
+/simplify focus on error handling
+```
+
+**What you should see:** a post-implementation review that checks whether the validation path is clear, safe, and not duplicated unnecessarily.
+
+## SHIP
+
+Prompt:
+
+```text
+Commit the validation change with a descriptive message and summarize the verification that passed.
+```
+
+**What you should see:** a commit backed by evidence, not a vague claim that the fix works.
+
+## Commands and Prompts Worth Repeating
+
+```text
+/plan
+/simplify focus on error handling
+/context
+/compact retain the TDD state, current test failures, and the validation plan
+```
+
+When you want the full reference behind this tutorial, go back to [Daily Workflow](/workflows/daily).

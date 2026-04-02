@@ -1,0 +1,100 @@
+export const metadata = {
+  title: "Your First Feature",
+  description:
+    "A first end-to-end feature walkthrough using Claude Code from session startup to commit.",
+}
+
+# Your First Feature
+
+Use this tutorial when someone has just finished setup and needs a concrete first win. The goal is not a large feature. The goal is to learn the session loop without burning context or trust.
+
+## 1. Start a named session
+
+Prompt or command:
+
+```bash
+claude -n "first-feature"
+```
+
+**What you should see:** a fresh Claude Code session with a name you can resume later.
+
+## 2. Ask Claude to explore before changing code
+
+Prompt:
+
+```text
+Read the relevant area of the codebase and explain how this feature should fit.
+Do not make edits yet. Tell me which files matter.
+```
+
+**What you should see:** a read-only explanation of the current implementation and a short candidate file list.
+
+## 3. Move into a small, explicit request
+
+Prompt:
+
+```text
+I want a small, reviewable change. Create a short plan and keep the scope tight.
+```
+
+**What you should see:** a plan with a handful of files, not a sweeping refactor.
+
+## 4. Create the failing verification first
+
+Prompt:
+
+```text
+Write the smallest failing test or repro for this feature. Run it and confirm RED.
+```
+
+**What you should see:** the test fails, and the behavior gap is explicit before production code changes start.
+
+## 5. Implement the change
+
+Prompt:
+
+```text
+Implement only what is necessary to make that verification pass.
+```
+
+**What you should see:** a narrow code diff that traces directly back to the failing artifact.
+
+## 6. Re-run verification
+
+Prompt:
+
+```text
+Run the same verification again and confirm GREEN.
+```
+
+**What you should see:** the exact failing test or repro now passes.
+
+## 7. Review the diff before shipping
+
+Prompt:
+
+```text
+Run /simplify and summarize any findings before we commit.
+```
+
+**What you should see:** a review pass for code reuse, quality, and efficiency, with any fixes applied before final approval.
+
+## 8. Commit and capture the next step
+
+Prompt:
+
+```text
+Commit this change with a descriptive message, then tell me what I should learn next.
+```
+
+**What you should see:** a descriptive commit plus a concrete recommendation to continue with [The Six-Step Loop](/tutorials/six-step-loop) or [Daily Workflow](/workflows/daily).
+
+## Reference Commands Used in This Tutorial
+
+```bash
+claude -n "first-feature"
+```
+
+```text
+/simplify
+```

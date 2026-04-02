@@ -1,0 +1,98 @@
+export const metadata = {
+  title: "First-Time Setup",
+  description:
+    "Install Claude Code, authenticate, configure the terminal, add the VS Code extension, and bootstrap your first project.",
+}
+
+# First-Time Setup
+
+**Source:** Claude Code: Complete Team Onboarding Instructions
+
+**Version:** April 2026 · Claude Code v2.1.89 · Opus 4.6 · Superpowers v5.0.6
+
+## Part 1: First-Time Setup (15 minutes)
+
+### 1.1 Install Claude Code
+
+Choose one method:
+
+**Native installer (recommended):**
+
+```bash
+curl -fsSL https://cli.claude.ai/install.sh | bash
+```
+
+Zero dependencies, auto-updates in the background, primary method Anthropic tests and supports.
+
+**npm (for version pinning):**
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+**Verify:**
+
+```bash
+claude --version   # Expect 2.1.89 or later
+claude doctor      # Diagnoses environment issues
+```
+
+### 1.2 Authenticate
+
+**Interactive (Pro/Max/Team/Enterprise):**
+
+```bash
+claude
+# Browser opens → sign in → CLI receives OAuth token
+```
+
+**CI/CD (API key):**
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-your-key-here
+```
+
+### 1.3 Configure Your Terminal
+
+Run inside your first Claude Code session:
+
+```
+/terminal-setup
+```
+
+This enables keyboard shortcuts:
+
+- `Alt+T` / `Option+T` — toggle extended thinking
+- `Alt+P` / `Option+P` — model picker
+- `Ctrl+G` — open content in external editor
+- `Shift+Tab` — cycle permission modes
+
+### 1.4 Install VS Code Extension
+
+From inside Claude Code:
+
+```
+/ide
+```
+
+Or install from the VS Code marketplace. Provides:
+
+- Inline diffs with accept/reject
+- `@`-mention file references
+- Plan review and editing before acceptance
+- Compaction shown as collapsible card
+
+### 1.5 Bootstrap Your Project
+
+Navigate to your project root and run:
+
+```bash
+claude
+/init
+```
+
+This analyzes your codebase and generates `CLAUDE.md`. For the interactive setup flow that also walks through skills, hooks, and memory files:
+
+```bash
+CLAUDE_CODE_NEW_INIT=1 claude
+```

@@ -1,0 +1,23 @@
+export const metadata = {
+  title: "Troubleshooting",
+  description:
+    "Common Claude Code onboarding and workflow problems, plus the documented fixes and guardrails.",
+}
+
+# Troubleshooting
+
+## Part 8: Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| Hooks not firing | Verify with `/hooks`. Check matcher regex (case-sensitive). Restart session after editing settings.json. |
+| Hook blocks unexpectedly | Check exit codes: 0=allow, 2=block, 1=warning. Use `Ctrl+O` for verbose hook output. |
+| Context filling too fast | `/compact` at 70-80%. Use subagents for investigation. `@file` references instead of having Claude search. |
+| Superpowers skills not loading | Run `/reload-plugins`, then `/skills`. Check with `/using-superpowers`. |
+| Permission prompt fatigue | Pre-approve safe commands in `permissions.allow`. Use Auto-Accept mode or Auto Mode. |
+| Agent Team lead doing work itself | Enable delegate mode. Specify "do not implement anything yourself" in the prompt. |
+| /batch creating too many PRs | Be more specific in the description. Use `/batch` only for truly independent, parallelizable changes. |
+| Remote Control session not found | `/rename` before `/rc`. Check claude.ai/code or Claude app → Code tab. |
+| Old Superpowers commands fail | Old `/brainstorm` etc. are deprecated. Use `/superpowers:brainstorm` or let auto-invoke handle it. |
+| Hooks slow down session | Budget 500ms max per PreToolUse hook. Use `async: true` for PostToolUse. Use `if` field (v2.1.85+) to narrow hook scope. |
+| `claude doctor` shows errors | Run `claude update` first. Check Node.js version, authentication, and network. |

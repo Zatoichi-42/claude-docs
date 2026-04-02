@@ -1,0 +1,48 @@
+export const metadata = {
+  title: "Superpowers Plugin",
+  description:
+    "Install Superpowers, understand how the meta-skill works, and learn what the plugin enforces.",
+}
+
+# Superpowers Plugin
+
+## Part 6: Superpowers Plugin (v5.0.6)
+
+### 6.1 Installation
+
+```
+/plugin install superpowers@claude-plugins-official
+/reload-plugins
+/skills
+```
+
+### 6.2 How It Works
+
+Superpowers installs a set of composable skills and a meta-skill (`using-superpowers`) that bootstraps automatically at session start. The "1% rule" means Claude checks for relevant skills before any response.
+
+**You do not need to manually invoke skills.** Start describing what you want to build, and Superpowers activates automatically. If you want explicit control:
+
+| Invoke | What Happens |
+|--------|--------------|
+| `/superpowers:brainstorm` | Socratic requirements exploration. Asks clarifying questions. Produces a spec in digestible chunks. |
+| `/superpowers:write-plan` | Generates micro-task plan (2–5 min tasks) with exact file paths, commands, and TDD steps. |
+| `/superpowers:execute-plan` | Subagent-driven implementation. Each task → code → review checkpoint. |
+| `/using-superpowers` | Re-reminds Claude of all available skills (useful mid-session if it seems to forget). |
+
+### 6.3 What Superpowers Enforces
+
+- **RED-GREEN-REFACTOR TDD**: Tests must fail before implementation. If Claude writes code before tests, the skill makes it delete the code and start over.
+- **YAGNI**: Build the simplest thing that works.
+- **Evidence over claims**: Claude must verify everything works with actual command output.
+- **Code review between tasks**: The `requesting-code-review` skill activates between implementation tasks.
+- **Architectural review safeguard**: After 3 failed fix attempts, triggers deeper analysis.
+
+### 6.4 Deprecated Commands
+
+These old commands **still work but redirect** to skills:
+
+- `/brainstorm` → redirects to `superpowers:brainstorm`
+- `/write-plan` → redirects to `superpowers:write-plan`
+- `/execute-plan` → redirects to `superpowers:execute-plan`
+
+Do not rely on these. Use the skill invocations or let auto-invocation handle it.

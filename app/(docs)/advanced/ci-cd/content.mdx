@@ -1,0 +1,75 @@
+export const metadata = {
+  title: "CI/CD Integration",
+  description:
+    "Run Claude Code in headless mode, pause destructive operations with defer, and resume PR-linked sessions.",
+}
+
+# CI/CD Integration
+
+<FileDownload
+  filename="ci-cd-pack.zip"
+  path="/downloads/ci-cd-pack.zip"
+  label="Download the CI/CD pack"
+  destination="settings.json + defer + automation hooks"
+/>
+<FileDownload
+  filename="defer-production-ops.sh"
+  path="files/hooks/defer-production-ops.sh"
+  label="Download defer-production-ops.sh"
+  destination=".claude/hooks/defer-production-ops.sh"
+/>
+
+## Part 5: CI/CD Integration
+
+### 5.1 Non-Interactive (Headless) Mode
+
+```bash
+# Basic analysis
+claude -p "review for security vulnerabilities" < src/auth.ts > report.md
+
+# Restricted tools
+claude -p "analyze test coverage gaps" \
+  --allowedTools "Read" "Grep" "Glob"
+
+# Pipe input
+cat error.log | claude -p "summarize the key errors in this log"
+
+# Auto mode for autonomous operation
+claude -p "fix all lint errors and commit" --permission-mode auto
+
+# Structured output
+claude -p "list all TODO comments as JSON" --json-schema todo-schema.json
+
+# Bare mode (skip hooks/LSP/plugins for speed)
+claude -p "explain this function" --bare
+
+# Max turns (circuit breaker)
+claude -p "refactor auth module" --max-turns 20
+```
+
+### 5.2 Human-in-the-Loop with defer
+
+In v2.1.89+, PreToolUse hooks can return `permissionDecision: "defer"` to pause headless sessions at specific tool calls. Resume with `claude -p --resume` after human review.
+
+**Example hook that defers destructive operations:**
+
+```bash
+#!/bin/bash
+INPUT=$(cat)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+
+if echo "$COMMAND" | grep -qE '(deploy|publish|release|migrate)'; then
+  echo '{"hookSpecificOutput":{"permissionDecision":"defer","permissionDecisionReason":"Production operation requires human approval"}}' 
+  exit 0
+fi
+exit 0
+```
+
+### 5.3 PR-Linked Sessions
+
+```bash
+# Resume session linked to a specific PR
+claude --from-pr 42
+
+# Sessions auto-link to PRs when created via gh pr create
+```

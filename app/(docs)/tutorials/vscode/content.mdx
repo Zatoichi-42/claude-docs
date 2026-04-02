@@ -1,0 +1,80 @@
+export const metadata = {
+  title: "VS Code Integration",
+  description:
+    "Install the extension and use it for inline diffs, file mentions, and plan review without losing the terminal workflow.",
+}
+
+# VS Code Integration
+
+The VS Code extension complements Claude Code. It does not replace the terminal session. Use it when visual review is faster than reading raw diffs in the console.
+
+## 1. Install from inside Claude Code
+
+Run:
+
+```text
+/ide
+```
+
+**What you should see:** the VS Code extension install flow or a pointer to the marketplace listing.
+
+## 2. Keep the terminal session as the source of truth
+
+The terminal stays best for:
+
+- starting or resuming sessions
+- running repo commands
+- working through the six-step loop
+- using Remote Control
+
+VS Code is best for:
+
+- inline diff review
+- accepting or rejecting edits
+- `@`-mentioning files quickly
+- opening plans in an editor
+
+## 3. Review inline diffs
+
+When Claude proposes a change, use the extension to inspect the diff directly in the edited file.
+
+**What you should see:** accept/reject controls attached to the changed region, instead of needing to manually compare file versions.
+
+## 4. Use file mentions to anchor prompts
+
+Prompt pattern:
+
+```text
+@src/auth/session.ts explain how refresh currently works and where validation should live.
+```
+
+**What you should see:** Claude focuses on the file you named instead of spending extra context budget rediscovering it.
+
+## 5. Review and edit plans outside the terminal
+
+The onboarding guide ties `Ctrl+G` to opening content in your external editor. Use that when Claude generates a plan you want to refine before execution.
+
+**What you should see:** the plan opens in VS Code so you can tighten scope or annotate it before implementation continues.
+
+## 6. Preserve the normal session loop
+
+Even with the extension installed, the preferred flow is still:
+
+1. explore
+2. plan
+3. create RED
+4. implement GREEN
+5. review
+6. ship
+
+Use VS Code where visibility helps, but keep the actual workflow grounded in the terminal session and the repo commands documented elsewhere.
+
+## Quick Reference
+
+```text
+/ide
+Ctrl+G
+@filepath
+```
+
+For the broader workflow around these tools, return to [First-Time Setup](/getting-started) and [Daily Workflow](/workflows/daily).

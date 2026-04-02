@@ -1,25 +1,23 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-})
-
 export const metadata: Metadata = {
+  metadataBase: new URL("https://claude.c9pg.com"),
   title: {
     template: "%s | Claude Code Docs - C9PG",
     default: "Claude Code Docs - C9PG",
   },
   description:
     "Learn how to use Claude Code - the AI-powered CLI for software development.",
+  openGraph: {
+    title: "Claude Code Docs - C9PG",
+    description:
+      "The complete onboarding and workflow guide for Claude Code, packaged as a Vercel docs site.",
+    siteName: "Claude Code Docs - C9PG",
+    type: "website",
+    url: "https://claude.c9pg.com",
+  },
 }
 
 export default function RootLayout({
@@ -28,15 +26,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" suppressHydrationWarning className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >

@@ -1,0 +1,176 @@
+export const metadata = {
+  title: "Hooks & Events",
+  description:
+    "Lifecycle events, handler types, exit semantics, and enforcement patterns for professional Claude Code setups.",
+}
+
+# Hooks & Events
+
+The vibe-coding guide expands the hook picture beyond the smaller source document. The short version: hooks are the deterministic enforcement layer. If a team wants a rule to stick, the rule needs a hook or another hard gate behind it.
+
+## What the expanded guide corrects
+
+- Hook coverage is broader than a 3-4 event mental model.
+- As of March-April 2026, Claude Code exposes **21+ lifecycle events** across **command**, **http**, **prompt**, and **agent** handler types.
+- `PermissionDenied`, `TeammateIdle`, `TaskCompleted`, `Elicitation`, `ElicitationResult`, `SessionStart`, `SessionEnd`, `SubagentStart`, `SubagentStop`, `PreCompact`, and `ConfigChange` all matter in advanced setups.
+
+## Major Hook Events
+
+| Event | When | Control | Matcher |
+|------|------|---------|---------|
+| `PreToolUse` | Before tool call executes | Allow / deny / defer / modify input | Tool name such as `Bash`, `Write`, `Edit`, `Read` |
+| `PostToolUse` | After tool completes successfully | Add context and trigger follow-up work | Tool name |
+| `Stop` | When Claude finishes responding | Block or allow completion | — |
+| `SubagentStop` | When a subagent finishes | Block or allow | — |
+| `SessionStart` | Session begins | Add context | — |
+| `SessionEnd` | Session terminates | Side effects only | — |
+| `UserPromptSubmit` | User submits a prompt | Add context or modify | — |
+| `Notification` | Claude sends a notification | Route to desktop, Slack, or other sinks | Notification type |
+| `PermissionRequest` | Permission dialog is shown | Auto-approve or auto-deny | — |
+| `PermissionDenied` | Auto Mode classifier denies a tool call | Retry with a different approach | — |
+| `TeammateIdle` | Agent Team member goes idle | Reassign work with exit code `2` | — |
+| `TaskCompleted` | Agent Team task marked complete | Enforce quality gates with exit code `2` | — |
+| `Elicitation` | MCP server requests structured user input | Intercept or modify | — |
+| `ElicitationResult` | After MCP input returns | Override or modify downstream response | — |
+| `PreCompact` | Before context compaction | Side effects | — |
+| `ConfigChange` | Configuration changes | Side effects | — |
+| `SubagentStart` | Subagent spawns | Side effects | — |
+
+## Handler Types
+
+### `command`
+
+Use shell commands when you need fast local enforcement.
+
+- receives event JSON on stdin
+- returns exit code semantics that Claude understands
+- ideal for formatting, security gates, lightweight validation, and test triggering
+
+```bash
+bash .claude/hooks/block-dangerous.sh
+```
+
+### `http`
+
+Use HTTP handlers when the hook decision depends on an external service.
+
+- good for remote policy checks or centralized logging
+- useful when multiple repos need one shared enforcement service
+
+```text
+https://your-server.example.com/hook
+```
+
+### `prompt`
+
+Use prompt handlers when the decision is context-sensitive and best expressed as an LLM judgment.
+
+```text
+"Is this command safe to run in production? $ARGUMENTS"
+```
+
+### `agent`
+
+Use agent handlers when the verification itself needs tools, file inspection, or command execution.
+
+```text
+"Verify all tests pass. Run the full gate. Block if incomplete."
+```
+
+## Exit Code Semantics
+
+| Exit code | Meaning | Practical effect |
+|-----------|---------|------------------|
+| `0` | Allow | The action proceeds normally |
+| `2` | Block | The action is denied and the feedback is sent back into the session |
+| `1` | Warning | The action proceeds, but the user sees a warning |
+
+`PreToolUse` is where teams normally enforce "no production code before RED." `PostToolUse` is where teams add fast feedback. `Stop` is where teams refuse to finish until the repo gate passes.
+
+## Example Settings Shape
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [{
+          "type": "command",
+          "command": "bash .claude/hooks/require-test-first.sh",
+          "timeout": 5
+        }]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [{
+          "type": "command",
+          "command": "bash .claude/hooks/block-dangerous.sh",
+          "timeout": 5
+        }]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/run-related-tests.sh",
+            "async": true,
+            "timeout": 180
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/auto-format.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [{
+          "type": "agent",
+          "prompt": "Verify all required tests pass. Run the full gate. Block if incomplete.",
+          "timeout": 180
+        }]
+      }
+    ]
+  }
+}
+```
+
+## Advanced Notes from the Expanded Guide
+
+### `defer`
+
+As of `v2.1.89`, a `PreToolUse` hook can return `permissionDecision: "defer"` to pause a headless session for human review.
+
+```jsonc
+{
+  "hookSpecificOutput": {
+    "permissionDecision": "defer",
+    "permissionDecisionReason": "Destructive operation requires human approval"
+  }
+}
+```
+
+This is especially useful in CI/CD.
+
+### `PermissionDenied`
+
+Also new in `v2.1.89`, the `PermissionDenied` hook fires after Auto Mode blocks a tool call. That gives teams a place to decide whether Claude should retry with a safer path.
+
+### Hook `if` field
+
+The earlier guide correctly noted the `if` field added in `v2.1.85`. The expanded guide still recommends it as the best way to narrow hook scope and reduce overhead.
+
+## Practical Recommendation
+
+Build your enforcement stack in this order:
+
+1. `PreToolUse` guardrails for behavior and safety
+2. `PostToolUse` formatting and related-test feedback
+3. `Stop` verification gate
+4. specialized hooks such as `PermissionDenied` and team-task events when the workflow grows more complex

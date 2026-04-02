@@ -1,0 +1,248 @@
+export const metadata = {
+  title: "Team Lead Guide",
+  description:
+    "A rollout-oriented guide for team leads adopting Claude Code across a repository or an engineering organization.",
+}
+
+# Team Lead Guide
+
+This page reframes the project configuration chapter for the person who sets the defaults once and then onboards the rest of the team. For the full source material and exact snippets, see [Project Setup](/configuration).
+
+<StarterKit />
+
+## What Team Leads Own
+
+- Defining the default workflow in `CLAUDE.md`
+- Deciding which commands can be pre-approved
+- Enforcing verification-first behavior with hooks and rules
+- Shipping starter files so every engineer begins from the same baseline
+- Recommending the plugin set that matches the repo and team maturity
+
+## Recommended Rollout Sequence
+
+### 1. Write the repo-level contract
+
+Start with the `CLAUDE.md` template and customize only the parts your team can actually enforce:
+
+- default workflow
+- verification policy
+- scope discipline
+- project commands
+- architecture notes
+
+<FileDownload
+  filename="CLAUDE.md.template"
+  path="files/CLAUDE.md.template"
+  label="Download the CLAUDE.md template"
+  destination="CLAUDE.md"
+/>
+
+### 2. Create the shared `.claude/` skeleton
+
+The baseline directory structure from the source document is:
+
+```bash
+mkdir -p .claude/hooks .claude/rules .claude/skills/test-forward .claude/agents .claude/plans .claude/state
+```
+
+This keeps hooks, scoped rules, skills, agents, long-lived plans, and ephemeral state in predictable places.
+
+### 3. Tune permissions before you turn on automation
+
+The documented `settings.json` is opinionated on purpose:
+
+- `model: "opusplan"` keeps stronger reasoning for planning while using faster execution defaults later.
+- `permissions.allow` reduces prompt fatigue for safe, frequent commands.
+- `permissions.deny` blocks secrets access up front.
+- `Stop` hooks enforce a final verification pass before Claude can finish.
+
+<FileDownload
+  filename="settings.json"
+  path="files/settings.json"
+  label="Download shared settings.json"
+  destination=".claude/settings.json"
+/>
+
+### 4. Decide which hooks are guardrails and which are convenience
+
+The source chapter separates these cleanly:
+
+- `require-test-first.sh`: enforcement guardrail
+- `block-dangerous.sh`: enforcement guardrail
+- `auto-format.sh`: convenience automation
+- `run-related-tests.sh`: convenience automation
+
+Keep the guardrails short and predictable. The troubleshooting guidance later in the doc explicitly warns that slow hooks degrade the session experience.
+
+<FileDownload
+  filename="block-dangerous.sh"
+  path="files/hooks/block-dangerous.sh"
+  label="Download block-dangerous.sh"
+  destination=".claude/hooks/block-dangerous.sh"
+/>
+<FileDownload
+  filename="require-test-first.sh"
+  path="files/hooks/require-test-first.sh"
+  label="Download require-test-first.sh"
+  destination=".claude/hooks/require-test-first.sh"
+/>
+<FileDownload
+  filename="auto-format.sh"
+  path="files/hooks/auto-format.sh"
+  label="Download auto-format.sh"
+  destination=".claude/hooks/auto-format.sh"
+/>
+<FileDownload
+  filename="run-related-tests.sh"
+  path="files/hooks/run-related-tests.sh"
+  label="Download run-related-tests.sh"
+  destination=".claude/hooks/run-related-tests.sh"
+/>
+
+### 5. Scope rules to the right code surfaces
+
+The onboarding doc recommends different testing expectations for frontend and backend code. That matters because too-broad rules become noise, while too-narrow rules let behavior drift.
+
+<FileDownload
+  filename="frontend-testing.md"
+  path="files/rules/frontend-testing.md"
+  label="Download frontend-testing.md"
+  destination=".claude/rules/frontend-testing.md"
+/>
+<FileDownload
+  filename="backend-testing.md"
+  path="files/rules/backend-testing.md"
+  label="Download backend-testing.md"
+  destination=".claude/rules/backend-testing.md"
+/>
+
+### 6. Ship at least one explicit verification-first skill
+
+The documented `test-forward` skill is a good baseline because it spells out:
+
+1. define the behavior
+2. create the smallest failing artifact
+3. run it and confirm RED
+4. record RED state
+5. implement the smallest production change
+6. verify GREEN
+7. review
+8. run the full repo gate
+
+<FileDownload
+  filename="SKILL.md"
+  path="files/skills/test-forward/SKILL.md"
+  label="Download the test-forward skill"
+  destination=".claude/skills/test-forward/SKILL.md"
+/>
+
+### 7. Add one reviewer persona before scaling the system
+
+The `code-reviewer` custom agent is intentionally narrow. It checks diff scope, bugs, security, missing tests, performance risks, and style drift. That is enough to create a reusable review lane without inventing a large internal framework up front.
+
+<FileDownload
+  filename="code-reviewer.md"
+  path="files/agents/code-reviewer.md"
+  label="Download code-reviewer.md"
+  destination=".claude/agents/code-reviewer.md"
+/>
+
+### 8. Finish with the boring but necessary repo hygiene
+
+Append the recommended `.gitignore` entries so local overrides, worktrees, and transient state do not pollute commits.
+
+```gitignore
+# Claude Code personal overrides
+.claude/settings.local.json
+
+# Claude Code worktrees (used by /batch)
+.claude/worktrees/
+
+# Claude Code state (ephemeral)
+.claude/state/
+```
+
+<FileDownload
+  filename="gitignore.append"
+  path="files/gitignore.append"
+  label="Download the .gitignore additions"
+  destination=".gitignore"
+/>
+
+## Plugin Recommendations
+
+The source guidance recommends:
+
+- `superpowers@claude-plugins-official`
+- optionally `code-review@claude-plugins-official`
+- `typescript-lsp@claude-plugins-official` for TypeScript repos
+
+Install from inside Claude Code:
+
+```
+/plugin install superpowers@claude-plugins-official
+/reload-plugins
+/skills
+```
+
+Then optionally:
+
+```
+/plugin install code-review@claude-plugins-official
+/reload-plugins
+```
+
+For TypeScript projects:
+
+```
+/plugin install typescript-lsp@claude-plugins-official
+/reload-plugins
+```
+
+## Adoption Layers
+
+The expanded vibe-coding guide recommends adopting Claude Code in layers rather than trying to switch the entire team onto every feature at once.
+
+### Layer 1: Foundation
+
+- write `CLAUDE.md`
+- configure `settings.json`
+- teach the mode cycle and the basic session commands
+
+### Layer 2: Verification
+
+- add TDD and safety hooks
+- add related-test and formatting hooks
+- add a Stop verification gate
+- add scoped rules and the `test-forward` skill
+
+### Layer 3: Productivity
+
+- install Superpowers
+- install LSP plugins
+- teach `/simplify`, `/debug`, `/rc`, and `/fast`
+
+### Layer 4: Scale
+
+- adopt `/batch`
+- use subagents or Agent Teams where the repo and team justify them
+- integrate headless mode and `defer` into CI/CD
+
+### Layer 5: Continuous Improvement
+
+- review `/insights`
+- review `/release-notes`
+- turn successful patterns into new skills, hooks, and rules
+
+## Onboarding Checklist
+
+- Create `CLAUDE.md`
+- Commit `.claude/settings.json`
+- Add hook scripts and mark them executable
+- Add scoped rules
+- Install the `test-forward` skill
+- Add the `code-reviewer` agent
+- Update `.gitignore`
+- Install recommended plugins
+- Walk one engineer through [First-Time Setup](/getting-started)
+- Run one feature using the [Daily Workflow](/workflows/daily)

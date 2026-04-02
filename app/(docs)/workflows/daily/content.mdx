@@ -1,0 +1,204 @@
+export const metadata = {
+  title: "Daily Workflow",
+  description:
+    "Run Claude Code day to day: start sessions, use the six-step loop, debug carefully, manage context, and work across devices.",
+}
+
+# Daily Workflow
+
+## Part 3: Daily Workflow Instructions
+
+### 3.1 Starting a Feature
+
+```bash
+# Start a named session
+claude -n "feature-oauth"
+
+# Or continue a previous session
+claude -c           # Most recent session
+claude -r "feature-oauth"  # By name
+```
+
+### 3.2 The Six-Step Loop
+
+**Step 1: EXPLORE (Plan Mode)**
+
+```
+Shift+Tab  →  Plan Mode indicator appears
+
+You: "Read src/auth/ and explain how sessions work.
+      Also look at how we handle environment variables for secrets."
+```
+
+Claude reads files and answers questions without making any edits.
+
+**Step 2: PLAN**
+
+```
+You: "I want to add Google OAuth. What files need to change?
+      What's the session flow? Create a detailed plan."
+
+[Claude produces plan]
+
+Ctrl+G  →  Opens plan in your editor for review and editing
+```
+
+**Step 3: RED (back to Normal Mode)**
+
+```
+Shift+Tab  →  Normal Mode
+
+You: "Write a failing test for the Google OAuth callback handler.
+      Run it and confirm it fails."
+
+[Claude writes test, runs it, test fails]
+[RED token is created at .claude/state/test-forward.json]
+```
+
+**Step 4: GREEN**
+
+```
+You: "Implement the OAuth callback handler to make the test pass."
+
+[Claude implements code]
+[PostToolUse hook auto-runs related tests after each edit]
+
+You: "Run the test and confirm it passes."
+```
+
+**Step 5: REVIEW**
+
+```
+/simplify
+
+[3 parallel agents review: code reuse, quality, efficiency]
+[Fixes are applied automatically]
+
+/security-review   (if auth/security-related)
+```
+
+**Step 6: SHIP**
+
+```
+You: "Commit with a descriptive message and open a PR."
+
+[Stop hook runs full gate verification]
+[If gate fails, Claude fixes and re-verifies]
+```
+
+### 3.3 Quick Tasks (Skip Planning)
+
+For trivial changes where the overhead of planning exceeds the benefit:
+
+```
+You: "Fix the typo in src/components/Header.tsx line 42:
+      'recieve' should be 'receive'"
+```
+
+No need for Plan Mode, no need for a test. Just do it.
+
+### 3.4 Debugging
+
+```
+/debug
+
+You: "Users report login fails after session timeout.
+      Here's the error: [paste error].
+      Check the auth flow in src/auth/, especially token refresh."
+```
+
+The `/debug` skill follows a structured 4-phase approach:
+
+1. **Root cause investigation** (not guessing)
+2. **Pattern analysis** (is this a recurring issue?)
+3. **Hypothesis testing** (test theories before fixing)
+4. **Implementation** (with verification)
+
+Safeguard: If 3 fix attempts fail, triggers architectural review.
+
+### 3.5 Context Management
+
+**Monitor:**
+
+```
+/context     # Check usage percentage
+```
+
+**Compress at 70-80%:**
+
+```
+/compact retain the TDD state, current test failures, and the OAuth plan
+```
+
+**Use subagents for investigation** (they get their own context):
+
+```
+You: "Spawn a subagent to investigate all uses of the deprecated
+      SessionManager class across the codebase and report back."
+```
+
+**Course-correct immediately:**
+
+- `Ctrl+C` to interrupt if Claude goes in the wrong direction
+- Every wrong turn wastes precious context
+
+### 3.6 Multi-Session Work
+
+```bash
+# Color-code sessions
+/color red       # Production hotfix
+/color blue      # Feature work
+/color green     # Test writing
+
+# Isolated worktrees
+claude -w feature-branch        # Own git worktree
+claude -w feature-branch --tmux # With tmux panes
+
+# Fork a session
+claude -c --fork-session        # Branch off without losing original
+```
+
+### 3.7 Remote Control
+
+```
+/rename oauth-feature
+/rc
+```
+
+Scan QR code with Claude app. Or open session URL at claude.ai/code. Your full local environment stays available.
+
+**Habits:**
+
+- `/rename` before `/rc` — sessions named "sure, go ahead" are impossible to find on your phone
+- Sleep recovery is automatic; power-off kills the session
+- `claude rc` starts server mode (new session); `/rc` carries over conversation history
+
+### 3.8 Speed and Effort Toggles
+
+```
+/fast           # Opus 4.6 at 2.5× speed (same model, speed-optimized)
+/effort high    # More thorough reasoning (costs more)
+/effort low     # Faster, cheaper for simple tasks
+```
+
+Use "ultrathink" keyword in your prompt for maximum reasoning effort (the old "max" level).
+
+## Session Management Best Practices
+
+The expanded vibe-coding guide emphasizes that context is the most precious resource in the system.
+
+1. Watch usage with `/context`.
+2. Compact aggressively at 70-80% with prompts like `/compact retain the TDD state, current test failures, and the OAuth plan`.
+3. Use subagents for exploration so the main context window stays clean.
+4. Interrupt bad turns early with `Ctrl+C`.
+5. Use `/rewind` for selective rollback instead of discarding an entire session.
+6. Name sessions with `/rename` and resume them later with `claude -r "<name>"` or `claude -c`.
+7. Fork sessions with `claude -c --fork-session` when you need to branch without losing the original.
+
+## Multi-Session Notes
+
+- `/color red` for a production hotfix session and `/color blue` for feature work
+- `claude -w feature-branch` for an isolated worktree
+- `claude -w feature-branch --tmux` for worktree plus tmux panes
+- use `/batch` when work is parallelizable without coordination
+- use Agent Teams when workers need to communicate

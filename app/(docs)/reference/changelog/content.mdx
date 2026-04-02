@@ -1,0 +1,78 @@
+export const metadata = {
+  title: "Release Changes",
+  description:
+    "Corrections to the original guide plus the March-April 2026 changes that materially affect Claude Code workflows.",
+}
+
+# Release Changes
+
+**Last verified:** April 1, 2026 — Claude Code `v2.1.89` · Opus `4.6` · Superpowers `v5.0.6`
+
+## Corrections to the original guide
+
+The expanded vibe-coding guide starts by correcting a few important assumptions:
+
+1. `/plan` is native Claude Code, not a Superpowers feature. Superpowers adds a methodology layer on top of planning.
+2. The Superpowers command transition is complete in `v5.0.6`. The current explicit commands are `/superpowers:brainstorm`, `/superpowers:write-plan`, and `/superpowers:execute-plan`. The old slash commands are deprecated redirects.
+3. The hook model is larger than the smaller source document implies. As of March 2026 there are **21+ lifecycle events** across **4 handler types**.
+4. Several modern workflow features were missing from the original guide, including `/rc`, `/fast`, `/loop`, `/batch`, `/simplify`, `/debug`, `/effort`, `/voice`, `/color`, `/rewind`, Agent Teams, Auto Mode, Computer Use, `--worktree`, `--from-pr`, and the 1M-token context window for Max/Team/Enterprise.
+5. `opusplan` is still valid, but `/fast` is a separate speed-oriented toggle for Opus `4.6`.
+6. The hook `if` field added in `v2.1.85` remains the recommended way to reduce hook overhead.
+7. `defer` in `v2.1.89` is critical for CI/CD pipelines that need human review on destructive operations.
+
+## What Changed Recently
+
+| Date | Version | Change |
+|------|---------|--------|
+| Apr 1 | `v2.1.89` | `defer` PreToolUse decision, `PermissionDenied` hook, named subagents in `@`-mention, thinking summaries off by default |
+| Mar 29 | `v2.1.88` | Session ID header for proxies, Jujutsu/Sapling VCS support |
+| Mar 24 | — | Auto Mode launched (AI-classified permissions) |
+| Mar 23 | — | Computer Use added to Claude Code and Cowork |
+| Mar 13 | `v2.1.75` | 1M token context window default for Opus 4.6 (Max/Team/Enterprise), `/color` command |
+| Mar 11 | `v2.1.76` | `/effort` command, MCP elicitation, `Elicitation` and `ElicitationResult` hooks |
+| Mar 7 | `v2.1.71` | `/loop` command for recurring tasks |
+| Mar 3 | `v2.1.69` | `/voice` push-to-talk mode |
+| Feb 28 | `v2.1.63` | `/simplify` and `/batch` bundled skills |
+| Feb 25 | — | Remote Control (`/rc`) research preview |
+| Feb 5 | `v2.1.32` | Agent Teams research preview |
+
+## Recommended Stack, Summarized
+
+### Layer 1: Foundation
+
+- write a tight `CLAUDE.md`
+- configure `settings.json`
+- learn `Shift+Tab`, `Ctrl+C`, `@file`, and `!cmd`
+- run `/init`, `/terminal-setup`, and `/doctor`
+
+### Layer 2: Verification
+
+- add a `PreToolUse` hook that blocks source edits without RED
+- add `PostToolUse` formatting and related-test hooks
+- add a `Stop` verification gate
+- add scoped rules
+- create the `test-forward` skill
+
+### Layer 3: Productivity
+
+- install Superpowers
+- install LSP plugins
+- use `/simplify` and `/debug`
+- enable `/rc`
+- use `/fast` when interactive iteration speed matters
+
+### Layer 4: Scale
+
+- use `/batch`
+- use subagents for writer/reviewer splits
+- experiment with Agent Teams
+- integrate headless mode plus `defer` into CI/CD
+- use `/loop` and `--worktree` where appropriate
+
+### Layer 5: Continuous Improvement
+
+- run `/insights` monthly
+- review `/release-notes` weekly
+- codify successful workflows into skills
+- share hooks, rules, and skills through committed team config
+- keep personal overrides in `settings.local.json`

@@ -1,0 +1,8 @@
+# Claude Code personal overrides
+.claude/settings.local.json
+
+# Claude Code worktrees (used by /batch)
+.claude/worktrees/
+
+# Claude Code state (ephemeral)
+.claude/state/
