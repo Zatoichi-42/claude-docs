@@ -97,6 +97,14 @@ export const navigation: NavGroup[] = [
         duration: "40 min",
       },
       {
+        title: "Build an Advanced Hook Stack",
+        href: "/tutorials/advanced-hooks",
+        description:
+          "Translate strict Codex-style workflow guardrails into a Claude Code hook stack with stateful RED/GREEN enforcement.",
+        part: "Tutorial",
+        duration: "Advanced",
+      },
+      {
         title: "VS Code Integration",
         href: "/tutorials/vscode",
         description:

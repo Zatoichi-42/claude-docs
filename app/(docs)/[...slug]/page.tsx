@@ -20,6 +20,7 @@ const docPages: Record<string, () => Promise<DocModule>> = {
   "reference/faq": () => import("../reference/faq/content.mdx"),
   "reference/glossary": () => import("../reference/glossary/content.mdx"),
   "reference/troubleshooting": () => import("../reference/troubleshooting/content.mdx"),
+  "tutorials/advanced-hooks": () => import("../tutorials/advanced-hooks/content.mdx"),
   "tutorials/core-commands": () => import("../tutorials/core-commands/content.mdx"),
   "tutorials/first-feature": () => import("../tutorials/first-feature/content.mdx"),
   "tutorials/first-hook": () => import("../tutorials/first-hook/content.mdx"),

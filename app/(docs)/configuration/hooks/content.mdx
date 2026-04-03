@@ -148,6 +148,30 @@ Once the basics work, these events become useful in larger setups:
 
 There is nothing wrong with these events. They are just later-stage tools.
 
+## Advanced: translating Codex-style workflow guards into Claude hooks
+
+If your best workflow in Codex relies on a global instructions file plus a small guard stack, the Claude Code translation is:
+
+- move the shared workflow rules into `CLAUDE.md`
+- wire the hook stack in `.claude/settings.json`
+- guard source edits with `Write|Edit|MultiEdit`
+- guard shell commands with `Bash`
+- record failed-test RED signals through `PostToolUseFailure`, not only `PostToolUse`
+
+That last point is the most important Claude-specific difference.
+
+In Codex, a single post-tool audit step may be enough.
+In Claude Code, failed tool calls have their own lifecycle event.
+
+So if you want “edit blocked without RED, allowed after failing test, blocked again at Stop until GREEN,” you need this shape:
+
+1. `PreToolUse` command hook for source-edit and shell-command guards
+2. `PostToolUse` command hook for successful edits and passing tests
+3. `PostToolUseFailure` command hook for failing test commands that create RED
+4. `Stop` command or agent hook for the final GREEN gate
+
+If you want the full step-by-step tutorial and downloadable files, use [Build an Advanced Hook Stack](/tutorials/advanced-hooks).
+
 ## Practical recommendation
 
 Adopt hooks in this order:

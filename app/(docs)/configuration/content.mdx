@@ -141,6 +141,12 @@ Use the individual downloads below if you only need one file, or grab the starte
   label="CI/CD pack"
   destination="settings + defer-ready automation hooks"
 />
+<FileDownload
+  filename="advanced-hooks-pack.zip"
+  path="/downloads/advanced-hooks-pack.zip"
+  label="Advanced hooks pack"
+  destination="CLAUDE.md addendum + advanced settings + shell hook stack"
+/>
 
 <FileDownload
   filename="CLAUDE.md.template"
@@ -149,10 +155,22 @@ Use the individual downloads below if you only need one file, or grab the starte
   destination="CLAUDE.md"
 />
 <FileDownload
+  filename="CLAUDE.advanced-hooks.md"
+  path="files/CLAUDE.advanced-hooks.md"
+  label="CLAUDE.md addendum: advanced hooks"
+  destination="merge into CLAUDE.md"
+/>
+<FileDownload
   filename="settings.json"
   path="files/settings.json"
   label="Shared settings.json"
   destination=".claude/settings.json"
+/>
+<FileDownload
+  filename="settings.advanced-hooks.json"
+  path="files/settings.advanced-hooks.json"
+  label="Advanced hook settings"
+  destination=".claude/settings.advanced-hooks.json"
 />
 <FileDownload
   filename="block-dangerous.sh"
@@ -183,6 +201,36 @@ Use the individual downloads below if you only need one file, or grab the starte
   path="files/hooks/defer-production-ops.sh"
   label="Hook: defer-production-ops.sh"
   destination=".claude/hooks/defer-production-ops.sh"
+/>
+<FileDownload
+  filename="hooklib.sh"
+  path="files/hooks/hooklib.sh"
+  label="Hook helper: hooklib.sh"
+  destination=".claude/hooks/hooklib.sh"
+/>
+<FileDownload
+  filename="session-start.sh"
+  path="files/hooks/session-start.sh"
+  label="Hook: session-start.sh"
+  destination=".claude/hooks/session-start.sh"
+/>
+<FileDownload
+  filename="pre-tool-use-guard.sh"
+  path="files/hooks/pre-tool-use-guard.sh"
+  label="Hook: pre-tool-use-guard.sh"
+  destination=".claude/hooks/pre-tool-use-guard.sh"
+/>
+<FileDownload
+  filename="post-tool-use-audit.sh"
+  path="files/hooks/post-tool-use-audit.sh"
+  label="Hook: post-tool-use-audit.sh"
+  destination=".claude/hooks/post-tool-use-audit.sh"
+/>
+<FileDownload
+  filename="stop-guard.sh"
+  path="files/hooks/stop-guard.sh"
+  label="Hook: stop-guard.sh"
+  destination=".claude/hooks/stop-guard.sh"
 />
 <FileDownload
   filename="frontend-testing.md"

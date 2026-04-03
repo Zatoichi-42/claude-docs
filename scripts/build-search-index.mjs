@@ -14,6 +14,7 @@ const pages = [
   { title: "Using MCP Tools", href: "/tutorials/mcp" },
   { title: "Your First Hook", href: "/tutorials/first-hook" },
   { title: "Build the Full Project Setup", href: "/tutorials/project-setup" },
+  { title: "Build an Advanced Hook Stack", href: "/tutorials/advanced-hooks" },
   { title: "VS Code Integration", href: "/tutorials/vscode" },
   { title: "Daily Workflow", href: "/workflows/daily" },
   { title: "Project Setup", href: "/configuration" },
