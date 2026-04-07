@@ -10,23 +10,19 @@ export const NAV_SECTIONS = [
     { slug: 'tutorials/review-debug', title: 'Review & Debug Commands' },
     { slug: 'tutorials/context-mastery', title: 'Context Mastery', badge: 'new' },
     { slug: 'tutorials/skills', title: 'Using Skills' },
+    { slug: 'tutorials/first-hook', title: 'Your First Hook' },
+    { slug: 'tutorials/vscode', title: 'VS Code & IDE Integration', badge: 'updated' },
     { slug: 'tutorials/mcp', title: 'Using MCP Tools' },
     { slug: 'tutorials/company-mcp', title: 'Company MCP Servers', badge: 'new' },
-    { slug: 'tutorials/first-hook', title: 'Your First Hook' },
-    { slug: 'tutorials/project-setup', title: 'Build the Full Project Setup' },
-    { slug: 'tutorials/advanced-hooks', title: 'Build an Advanced Hook Stack' },
-    { slug: 'tutorials/vscode', title: 'VS Code & IDE Integration', badge: 'updated' },
   ]},
   { label: 'Workflows', items: [
     { slug: 'workflows/daily', title: 'Daily Workflow' },
+    { slug: 'workflows/feature', title: 'Feature Workflow', badge: 'new' },
     { slug: 'workflows/ratchet', title: 'The Ratchet Pattern', badge: 'new' },
   ]},
-  { label: 'Configuration', items: [
-    { slug: 'configuration', title: 'Project Setup' },
-  ]},
-  { label: 'Team Rollout', items: [
-    { slug: 'team/team-leads', title: 'Team Leader Setup' },
-    { slug: 'team/adoption', title: 'Adoption Roadmap' },
+  { label: 'Production Setup', items: [
+    { slug: 'tutorials/global-setup', title: 'Production Setup Tutorial', badge: 'new' },
+    { slug: 'tutorials/project-setup', title: 'Download & Install', badge: 'updated' },
   ]},
   { label: 'Reference', items: [
     { slug: 'reference/commands', title: 'Command Quick Reference', badge: 'updated' },
