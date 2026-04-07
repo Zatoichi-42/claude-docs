@@ -2742,7 +2742,7 @@ Mobile-first. Test 320/768/1024px.`}</CodeBlock>
         <p>
           Slash commands are markdown files in <code>~/.claude/commands/</code>.
           They become available as <code>/build</code>, <code>/evolve</code>,{" "}
-          <code>/status</code> in every project.
+          <code>/status</code>, and <code>/quick</code> in every project.
         </p>
 
         <h3>commands/build.md — Staged implementation with audit</h3>
@@ -3414,6 +3414,23 @@ claude -r "feature-notifications"   # or: claude -c
       <CodeBlock>{`/init        /memory      /skills      /mcp
 /plugin      /ide         /desktop     /schedule
 /doctor      /release-notes`}</CodeBlock>
+      <h2>Build Sequence (custom commands)</h2>
+      <CodeBlock>{`/build [args]           # Staged implementation — reads Build Sequence, runs tests, produces audit
+/quick [task]           # Bypass build sequence for one-off tasks (skips impl-protocol-reminder.sh)
+/evolve                 # Ratchet loop for agent prompt improvement
+/status                 # Project health summary`}</CodeBlock>
+      <div className="callout callout-warn">
+        <strong>
+          ⚠️ Without a Build Sequence, only /quick prompts will work
+        </strong>
+        <p>
+          The <code>impl-protocol-reminder.sh</code> hook hard-blocks every
+          prompt that does not start with <code>/quick</code> when the project
+          CLAUDE.md has no <code>## Build Sequence</code> section. Add one
+          before running any implementation work — or use{" "}
+          <code>/quick [task]</code> to bypass for a single prompt.
+        </p>
+      </div>
       <h2>Speed & Scale</h2>
       <CodeBlock>{`/fast        /effort <level>    /batch <desc>    /loop <int> <prompt>`}</CodeBlock>
       <h2>CLI Flags</h2>
